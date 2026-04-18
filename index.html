@@ -146,6 +146,7 @@
 
     const STANDARD_COMPONENTS = ['Fundament','Einzelfundament','Streifenfundament','Bodenplatte','Wand','Stütze','Unterzug','Überzug','Decke','Treppe','Balkonplatte','Attika','Ringbalken','Ringanker','Sturz','Binder','Pfette','Mauerwerk','Fertigteilwand','Fertigteildecke'];
     const ASPECT_SUGGESTIONS = ['untere Bewehrung','obere Bewehrung','Schubbewehrung','Anschlussbewehrung','Bügel','Betondeckung','Durchstanzbewehrung','Schalung','Abmessungen','Einbauteile'];
+    let pendingFocus = null;
 
     function loadState() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch { return null; } }
     function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
@@ -277,6 +278,7 @@
         ${state.dialogs.structure ? structureDialog() : ''}
       `;
       bindEvents();
+      restoreFocus();
     }
 
     function tabButton(value,label){ return `<button class="tab-btn ${state.tab===value?'active':''}" data-tab="${value}">${label}</button>`; }
@@ -387,6 +389,44 @@
     function statusClass(status){ return status === 'OK' ? 'status-ok' : status === 'Hinweis' ? 'status-hinweis' : 'status-mangel'; }
     function escapeHtml(str){ return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
     function escapeAttr(str){ return escapeHtml(str).replace(/`/g, '&#96;'); }
+    function captureFocus(){
+      const el = document.activeElement;
+      if (!el) return null;
+      const tag = (el.tagName || '').toLowerCase();
+      if (tag !== 'input' && tag !== 'textarea') return null;
+      const key =
+        el.dataset.field ? `field:${el.dataset.field}` :
+        el.dataset.form ? `form:${el.dataset.form}` :
+        el.dataset.projectForm ? `projectForm:${el.dataset.projectForm}` :
+        el.dataset.structureForm ? `structureForm:${el.dataset.structureForm}` :
+        null;
+      if (!key) return null;
+      return {
+        key,
+        start: typeof el.selectionStart === 'number' ? el.selectionStart : null,
+        end: typeof el.selectionEnd === 'number' ? el.selectionEnd : null,
+      };
+    }
+    function restoreFocus(){
+      if (!pendingFocus) return;
+      let selector = null;
+      if (pendingFocus.key.startsWith('field:')) selector = `[data-field="${pendingFocus.key.slice(6)}"]`;
+      if (pendingFocus.key.startsWith('form:')) selector = `[data-form="${pendingFocus.key.slice(5)}"]`;
+      if (pendingFocus.key.startsWith('projectForm:')) selector = `[data-project-form="${pendingFocus.key.slice(12)}"]`;
+      if (pendingFocus.key.startsWith('structureForm:')) selector = `[data-structure-form="${pendingFocus.key.slice(14)}"]`;
+      if (!selector) {
+        pendingFocus = null;
+        return;
+      }
+      const el = document.querySelector(selector);
+      if (el) {
+        el.focus();
+        if (typeof pendingFocus.start === 'number' && typeof el.setSelectionRange === 'function') {
+          el.setSelectionRange(pendingFocus.start, pendingFocus.end ?? pendingFocus.start);
+        }
+      }
+      pendingFocus = null;
+    }
 
     function bindEvents(){
       document.querySelectorAll('[data-tab]').forEach(el => el.onclick = () => update(() => { state.tab = el.dataset.tab; }));
@@ -415,10 +455,10 @@
       document.querySelectorAll('[data-delete-point]').forEach(el => el.onclick = () => deletePoint(el.dataset.deletePoint));
       document.querySelectorAll('[data-save]').forEach(el => el.onclick = () => savePoint(el.dataset.save === 'close' ? { closeAfter:true } : el.dataset.save === 'keep' ? { keepComponent:true } : {}));
       document.querySelectorAll('[data-close-dialog]').forEach(el => el.onclick = () => update(() => state.dialogs[el.dataset.closeDialog] = false));
-      document.querySelectorAll('[data-field="search"]').forEach(el => el.oninput = () => update(() => state.search = el.value));
-      document.querySelectorAll('[data-form]').forEach(el => el.oninput = () => update(() => state.form[el.dataset.form] = el.value));
-      document.querySelectorAll('[data-project-form]').forEach(el => el.oninput = () => { state.projectForm[el.dataset.projectForm] = el.value; render(); });
-      document.querySelectorAll('[data-structure-form]').forEach(el => el.oninput = () => { state.structureForm[el.dataset.structureForm] = el.value; render(); });
+      document.querySelectorAll('[data-field="search"]').forEach(el => el.oninput = () => { pendingFocus = captureFocus(); update(() => state.search = el.value); });
+      document.querySelectorAll('[data-form]').forEach(el => el.oninput = () => { pendingFocus = captureFocus(); update(() => state.form[el.dataset.form] = el.value); });
+      document.querySelectorAll('[data-project-form]').forEach(el => el.oninput = () => { pendingFocus = captureFocus(); state.projectForm[el.dataset.projectForm] = el.value; render(); });
+      document.querySelectorAll('[data-structure-form]').forEach(el => el.oninput = () => { pendingFocus = captureFocus(); state.structureForm[el.dataset.structureForm] = el.value; render(); });
       const photoInput = document.getElementById('photo-input');
       if (photoInput) photoInput.onchange = () => update(() => { const files = Array.from(photoInput.files || []); state.form.photoAttached = files.length > 0; state.form.photoCount = files.length; state.form.photoNames = files.map(f => f.name || 'Foto'); });
     }
