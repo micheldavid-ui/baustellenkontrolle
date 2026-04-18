@@ -1,0 +1,445 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!doctype html&gt;</p>
+<p class="p1">&lt;html lang="de"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="theme-color" content="#0f172a" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Baustellenkontrolle&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--bg: #f8fafc;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--surface: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--muted: #64748b;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--text: #0f172a;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--border: #e2e8f0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--strong: #0f172a;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--hover: #f1f5f9;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--primary: #0f172a;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--primary-contrast: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--ok-bg: #dcfce7;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--ok-text: #166534;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--ok-border: #bbf7d0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--hint-bg: #fef3c7;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--hint-text: #92400e;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--hint-border: #fde68a;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--defect-bg: #fee2e2;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--defect-text: #991b1b;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--defect-border: #fecaca;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--shadow: 0 1px 2px rgba(15,23,42,.06), 0 10px 24px rgba(15,23,42,.04);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>* { box-sizing: border-box; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html, body { margin: 0; min-height: 100%; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif; background: var(--bg); color: var(--text); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.app { max-width: 1400px; margin: 0 auto; padding: 12px 12px 92px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.topbar { display:flex; flex-direction:column; gap:12px; margin-bottom:24px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.title { margin:0; font-size:1.8rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.subtitle { margin:6px 0 0; color:var(--muted); font-size:.92rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.row, .inline, .actions { display:flex; align-items:center; gap:8px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.between { justify-content:space-between; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.wrap { flex-wrap:wrap; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.grow { flex:1; min-width:0; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.layout { display:grid; gap:24px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card { background:var(--surface); border:1px solid var(--border); border-radius:20px; box-shadow:var(--shadow); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card-header { padding:18px 18px 0; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card-title { font-size:1.1rem; font-weight:700; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card-content { padding:18px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.badge { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--border); border-radius:999px; background:#fff; padding:7px 12px; font-size:.82rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn { border:1px solid transparent; background:var(--primary); color:var(--primary-contrast); border-radius:14px; padding:11px 14px; min-height:44px; display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn:hover { opacity:.95; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn:disabled { opacity:.5; cursor:not-allowed; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn-outline { background:#fff; color:var(--text); border-color:var(--border); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn-ghost { background:transparent; color:var(--text); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn-icon { width:40px; height:40px; min-width:40px; padding:0; border-radius:999px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn-sm { min-height:36px; padding:8px 12px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.input, .textarea { width:100%; border:1px solid var(--border); border-radius:14px; background:#fff; color:var(--text); padding:12px 14px; font:inherit; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.textarea { min-height:108px; resize:vertical; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.label { display:block; font-weight:600; font-size:.95rem; margin-bottom:6px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.stack-sm, .stack-md, .stack-lg { display:flex; flex-direction:column; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.stack-sm { gap:8px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.stack-md { gap:14px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.stack-lg { gap:20px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.search-wrap { position:relative; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.search-wrap .input { padding-left:40px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.55; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.tabs { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; background:var(--hover); border-radius:14px; padding:4px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.tab-btn, .icon-btn, .chip, .status-btn, .bottom-tab, .plain-btn { border:none; background:transparent; color:inherit; cursor:pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.tab-btn { border-radius:10px; padding:10px 12px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.tab-btn.active, .bottom-tab.active, .status-btn.active { background:var(--primary); color:var(--primary-contrast); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.scroll { max-height:520px; overflow:auto; padding-right:6px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.scroll.large { max-height:540px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.click-card { cursor:pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.selected { border-color:var(--strong); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.muted { color:var(--muted); font-size:.92rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.fine { color:var(--muted); font-size:.8rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.icon-btn { border-radius:999px; padding:6px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.star-active { color:#d97706; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.box, .empty { border:1px solid var(--border); border-radius:18px; background:#f8fafc; padding:12px 14px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.empty { border-style:dashed; color:var(--muted); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.centered { text-align:center; padding:30px 16px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip-wrap { display:flex; gap:8px; flex-wrap:wrap; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip { border:1px solid var(--border); border-radius:999px; background:#fff; padding:7px 12px; font-size:.76rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.status-grid, .grid-2, .grid-3, .bottom-nav-grid { display:grid; gap:8px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.status-grid { grid-template-columns:repeat(3,1fr); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.status-btn { display:flex; align-items:center; justify-content:center; gap:8px; border:1px solid var(--border); border-radius:14px; background:#fff; padding:12px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.status-ok { border-color:var(--ok-border); background:color-mix(in srgb, var(--ok-bg) 28%, white); color:var(--ok-text); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.status-hinweis { border-color:var(--hint-border); background:color-mix(in srgb, var(--hint-bg) 28%, white); color:var(--hint-text); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.status-mangel { border-color:var(--defect-border); background:color-mix(in srgb, var(--defect-bg) 28%, white); color:var(--defect-text); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.dialog-backdrop { position:fixed; inset:0; background:rgba(15,23,42,.38); display:flex; align-items:center; justify-content:center; padding:16px; z-index:100; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.dialog { width:min(100%,520px); background:#fff; border-radius:20px; border:1px solid var(--border); box-shadow:var(--shadow); padding:18px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.bottom-nav { position:fixed; left:0; right:0; bottom:0; z-index:40; border-top:1px solid var(--border); background:rgba(255,255,255,.95); backdrop-filter:blur(8px); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.bottom-nav-grid { grid-template-columns:repeat(3,1fr); max-width:1400px; margin:0 auto; padding:8px 12px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.bottom-tab { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; border-radius:12px; padding:8px; font-size:.78rem; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.hidden { display:none !important; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (min-width: 1024px) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.app { padding:16px 16px 16px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.topbar { flex-direction:row; align-items:center; justify-content:space-between; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.layout { grid-template-columns:320px 1fr; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.content-grid { display:grid; grid-template-columns:1.1fr .9fr; gap:24px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.bottom-nav, .mobile-only, .mobile-inline { display:none !important; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (max-width: 1023px) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.desktop-only { display:none !important; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="app"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const STORAGE_KEY = 'baustellenkontrolle_singlefile_v1';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const state = loadState() || {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>projects: [</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{</p>
+<p class="p1"><span class="Apple-converted-space">          </span>id: 'p1',</p>
+<p class="p1"><span class="Apple-converted-space">          </span>name: 'Wohnanlage Musterstraße',</p>
+<p class="p1"><span class="Apple-converted-space">          </span>location: 'Hamburg',</p>
+<p class="p1"><span class="Apple-converted-space">          </span>favorite: true,</p>
+<p class="p1"><span class="Apple-converted-space">          </span>structures: [</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{</p>
+<p class="p1"><span class="Apple-converted-space">              </span>id: 's1', name: 'Gebäude A', inspections: [</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{ id:'i1', date:'2026-04-17', inspector:'Michel', points:[</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>{ id:'pt1', component:'Fundament F5', aspect:'untere Bewehrung', status:'Mangel', note:'zu große Abstände', photos:1, createdAt:'09:10' },</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>{ id:'pt2', component:'Fundament F5', aspect:'obere Bewehrung', status:'OK', note:'', photos:0, createdAt:'09:14' },</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>{ id:'pt3', component:'Wand W2', aspect:'Schubbewehrung', status:'Mangel', note:'fehlt unterhalb der Wand', photos:2, createdAt:'09:22' }</p>
+<p class="p1"><span class="Apple-converted-space">                </span>]}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>]</p>
+<p class="p1"><span class="Apple-converted-space">            </span>},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id:'s2', name:'Gebäude B', inspections:[] },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id:'s3', name:'Tiefgarage', inspections:[] }</p>
+<p class="p1"><span class="Apple-converted-space">          </span>]</p>
+<p class="p1"><span class="Apple-converted-space">        </span>},</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{ id:'p2', name:'Logistikhalle Nord', location:'Bremen', favorite:true, structures:[{ id:'s4', name:'Halle 1', inspections:[] }] },</p>
+<p class="p1"><span class="Apple-converted-space">        </span>{ id:'p3', name:'Parkhaus Innenstadt', location:'Kiel', favorite:false, structures:[{ id:'s5', name:'Bauwerk Ost', inspections:[] }, { id:'s6', name:'Bauwerk West', inspections:[] }] }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>],</p>
+<p class="p1"><span class="Apple-converted-space">      </span>selectedProjectId: 'p1',</p>
+<p class="p1"><span class="Apple-converted-space">      </span>selectedStructureId: 's1',</p>
+<p class="p1"><span class="Apple-converted-space">      </span>selectedInspectionId: 'i1',</p>
+<p class="p1"><span class="Apple-converted-space">      </span>tab: 'projekte',</p>
+<p class="p1"><span class="Apple-converted-space">      </span>search: '',</p>
+<p class="p1"><span class="Apple-converted-space">      </span>favoritesOnly: false,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>editingPointId: null,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>isMobileNavOpen: true,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>dialogs: { project:false, structure:false },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>projectForm: { id:null, name:'', location:'', firstStructure:'' },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>structureForm: { name:'' },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>form: { component:'', aspect:'', status:'OK', note:'', photoAttached:false, photoCount:0, photoNames:[] }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const STANDARD_COMPONENTS = ['Fundament','Einzelfundament','Streifenfundament','Bodenplatte','Wand','Stütze','Unterzug','Überzug','Decke','Treppe','Balkonplatte','Attika','Ringbalken','Ringanker','Sturz','Binder','Pfette','Mauerwerk','Fertigteilwand','Fertigteildecke'];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const ASPECT_SUGGESTIONS = ['untere Bewehrung','obere Bewehrung','Schubbewehrung','Anschlussbewehrung','Bügel','Betondeckung','Durchstanzbewehrung','Schalung','Abmessungen','Einbauteile'];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function loadState() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch { return null; } }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function todayIso() { return new Date().toISOString().slice(0,10); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function nowTime() { return new Date().toLocaleTimeString('de-DE',{hour:'2-digit', minute:'2-digit'}); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function formatDate(dateStr) { return new Date(dateStr).toLocaleDateString('de-DE',{year:'numeric', month:'2-digit', day:'2-digit'}); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function cls(...arr){ return arr.filter(Boolean).join(' '); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function selectedProject(){ return state.projects.find(p =&gt; p.id === state.selectedProjectId) || state.projects[0]; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function selectedStructure(){ const p = selectedProject(); return p?.structures.find(s =&gt; s.id === state.selectedStructureId) || p?.structures[0]; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function selectedInspection(){ const s = selectedStructure(); return s?.inspections.find(i =&gt; i.id === state.selectedInspectionId) || s?.inspections[0]; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function icon(name){ return name; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function filteredProjects(){ const q = state.search.toLowerCase(); return state.projects.filter(project =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const fav = state.favoritesOnly ? project.favorite : true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const match = !q || project.name.toLowerCase().includes(q) || (project.location || '').toLowerCase().includes(q) || project.structures.some(s =&gt; s.name.toLowerCase().includes(q));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return fav &amp;&amp; match;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function componentSuggestions(){ const set = new Set(STANDARD_COMPONENTS); const p = selectedProject(); if (p) p.structures.forEach(s =&gt; s.inspections.forEach(i =&gt; i.points.forEach(pt =&gt; pt.component &amp;&amp; set.add(pt.component)))); const q = state.form.component.trim().toLowerCase(); const arr = Array.from(set); return (!q ? arr : arr.filter(x =&gt; x.toLowerCase().includes(q))).slice(0,8); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function aspectSuggestions(){ const q = state.form.aspect.trim().toLowerCase(); return (!q ? ASPECT_SUGGESTIONS : ASPECT_SUGGESTIONS.filter(x =&gt; x.toLowerCase().includes(q))).slice(0,6); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function ensureSelection(){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const p = selectedProject();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!p) return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!state.projects.some(x =&gt; x.id === state.selectedProjectId)) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>state.selectedProjectId = state.projects[0]?.id || '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const p2 = selectedProject();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (p2 &amp;&amp; !p2.structures.some(x =&gt; x.id === state.selectedStructureId)) state.selectedStructureId = p2.structures[0]?.id || '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const s = selectedStructure();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (s &amp;&amp; !s.inspections.some(x =&gt; x.id === state.selectedInspectionId)) state.selectedInspectionId = s.inspections[0]?.id || '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function update(mutator){ mutator(); ensureSelection(); saveState(); render(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function resetPointForm(keepComponent=false){ state.form = { component: keepComponent ? state.form.component : '', aspect:'', status:'OK', note:'', photoAttached:false, photoCount:0, photoNames:[] }; state.editingPointId = null; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function openProjectDialog(editProject){ state.projectForm = editProject ? { id:editProject.id, name:editProject.name, location:editProject.location || '', firstStructure:'' } : { id:null, name:'', location:'', firstStructure:'' }; state.dialogs.project = true; render(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function openStructureDialog(){ state.structureForm = { name:'' }; state.dialogs.structure = true; render(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function selectProjectAction(project){ update(() =&gt; { state.selectedProjectId = project.id; state.selectedStructureId = project.structures[0]?.id || ''; state.selectedInspectionId = project.structures[0]?.inspections[0]?.id || ''; state.tab = 'bauwerke'; }); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function selectStructureAction(structure){ update(() =&gt; { state.selectedStructureId = structure.id; state.selectedInspectionId = structure.inspections[0]?.id || ''; state.tab = 'kontrollen'; }); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function createProject(){ if (!state.projectForm.name.trim()) return; update(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (state.projectForm.id) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>state.projects = state.projects.map(project =&gt; project.id !== state.projectForm.id ? project : { ...project, name: state.projectForm.name.trim(), location: state.projectForm.location.trim() });</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const stamp = Date.now();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const newProject = { id:`p${stamp}`, name:state.projectForm.name.trim(), location:state.projectForm.location.trim(), favorite:false, structures:[{ id:`s${stamp}`, name: state.projectForm.firstStructure.trim() || 'Bauwerk 1', inspections:[] }] };</p>
+<p class="p1"><span class="Apple-converted-space">        </span>state.projects.unshift(newProject);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>state.selectedProjectId = newProject.id;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>state.selectedStructureId = newProject.structures[0].id;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>state.selectedInspectionId = '';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>state.tab = 'bauwerke';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>state.dialogs.project = false;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>state.projectForm = { id:null, name:'', location:'', firstStructure:'' };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function createStructure(){ const p = selectedProject(); if (!p || !state.structureForm.name.trim()) return; update(() =&gt; { const stamp = Date.now(); const newStructure = { id:`s${stamp}`, name:state.structureForm.name.trim(), inspections:[] }; p.structures.push(newStructure); state.selectedStructureId = newStructure.id; state.selectedInspectionId=''; state.tab='bauwerke'; state.dialogs.structure=false; }); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function createInspection(){ const s = selectedStructure(); if (!s) return; update(() =&gt; { const newInspection = { id:`i${Date.now()}`, date:todayIso(), inspector:'Michel', points:[] }; s.inspections.unshift(newInspection); state.selectedInspectionId = newInspection.id; state.tab = 'kontrollen'; }); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function deleteInspection(id){ const s = selectedStructure(); if (!s) return; update(() =&gt; { s.inspections = s.inspections.filter(i =&gt; i.id !== id); if (state.selectedInspectionId === id) state.selectedInspectionId = s.inspections[0]?.id || ''; }); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function deleteProject(id){ update(() =&gt; { state.projects = state.projects.filter(p =&gt; p.id !== id); const p = state.projects[0]; if (p) { state.selectedProjectId = p.id; state.selectedStructureId = p.structures[0]?.id || ''; state.selectedInspectionId = p.structures[0]?.inspections[0]?.id || ''; } }); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function toggleFavorite(id){ update(() =&gt; { const p = state.projects.find(x =&gt; x.id === id); if (p) p.favorite = !p.favorite; }); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function savePoint(opts={ keepComponent:false, closeAfter:false }){ const inspection = selectedInspection(); if (!inspection || !state.form.component.trim()) return; update(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const payload = { component:state.form.component.trim(), aspect:state.form.aspect.trim(), status:state.form.status, note:state.form.note.trim(), photos: state.form.photoCount || (state.form.photoAttached ? 1 : 0), photoNames: state.form.photoNames || [] };</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (state.editingPointId) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>inspection.points = inspection.points.map(p =&gt; p.id !== state.editingPointId ? p : { ...p, ...payload });</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>inspection.points.unshift({ id:`pt${Date.now()}`, ...payload, createdAt: nowTime() });</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>resetPointForm(opts.keepComponent);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (opts.closeAfter) state.tab = 'kontrollen';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function editPoint(id){ const inspection = selectedInspection(); const point = inspection?.points.find(p =&gt; p.id === id); if (!point) return; state.editingPointId = id; state.form = { component:point.component, aspect:point.aspect, status:point.status, note:point.note, photoAttached:point.photos&gt;0, photoCount:point.photos||0, photoNames:point.photoNames||[] }; state.tab='neu'; saveState(); render(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function deletePoint(id){ const inspection = selectedInspection(); if (!inspection) return; update(() =&gt; { inspection.points = inspection.points.filter(p =&gt; p.id !== id); if (state.editingPointId === id) resetPointForm(false); }); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function groupedPoints(){ const inspection = selectedInspection(); const map = new Map(); (inspection?.points || []).forEach(point =&gt; { const key = point.component.trim() || 'Ohne Bauteil'; if (!map.has(key)) map.set(key, []); map.get(key).push(point); }); return Array.from(map.entries()); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function render(){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>ensureSelection();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const app = document.getElementById('app');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const project = selectedProject();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const structure = selectedStructure();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const inspection = selectedInspection();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>app.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="app"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="topbar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;h1 class="title"&gt;Baustellenkontrolle&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="subtitle"&gt;Prototyp für die mobile Erfassung statisch-konstruktiver Kontrollen&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="row wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span class="badge"&gt;${escapeHtml(project?.name || '')}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span class="badge"&gt;${escapeHtml(structure?.name || '')}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button class="btn btn-outline mobile-inline" data-action="toggle-nav"&gt;${state.isMobileNavOpen ? 'Navigation schließen' : 'Navigation öffnen'}&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="layout"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card ${!state.isMobileNavOpen ? 'mobile-only hidden' : ''}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="card-header"&gt;&lt;div class="card-title"&gt;Navigation&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="card-content stack-md"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="tabs desktop-only"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>${tabButton('projekte','Projekte')}</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>${tabButton('bauwerke','Bauwerke')}</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>${tabButton('kontrollen','Kontrollen')}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>${state.tab === 'projekte' ? projectsView() : ''}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>${state.tab === 'bauwerke' ? structuresView(project) : ''}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>${state.tab === 'kontrollen' ? inspectionsView(structure) : ''}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>${state.tab === 'neu' ? pointFormView() : ''}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="stack-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="content-grid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div class="card-header"&gt;&lt;div class="card-title"&gt;Kontrolle ${inspection ? formatDate(inspection.date) : '–'}&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div class="card-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="scroll large stack-sm"&gt;${pointsView(inspection)}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>${state.tab === 'kontrollen' ? exportView(project, structure, inspection) : ''}</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bottom-nav mobile-only"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="bottom-nav-grid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>${bottomTab('projekte','Projekte')}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>${bottomTab('bauwerke','Bauwerke')}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>${bottomTab('kontrollen','Kontrollen')}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>${state.dialogs.project ? projectDialog() : ''}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>${state.dialogs.structure ? structureDialog() : ''}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>bindEvents();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function tabButton(value,label){ return `&lt;button class="tab-btn ${state.tab===value?'active':''}" data-tab="${value}"&gt;${label}&lt;/button&gt;`; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function bottomTab(value,label){ return `&lt;button class="bottom-tab ${state.tab===value?'active':''}" data-tab="${value}"&gt;${label}&lt;/button&gt;`; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function projectsView(){ return `</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stack-md"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="search-wrap"&gt;&lt;span class="search-icon"&gt;⌕&lt;/span&gt;&lt;input class="input" placeholder="Projekt oder Bauwerk suchen" value="${escapeAttr(state.search)}" data-field="search"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="grid-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button class="btn ${state.favoritesOnly ? '' : 'btn-outline'}" data-action="toggle-favorites"&gt;Nur Favoriten&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button class="btn" data-action="open-project-dialog"&gt;Neues Projekt&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="scroll stack-sm"&gt;${filteredProjects().map(project =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="card click-card ${state.selectedProjectId===project.id?'selected':''}" data-select-project="${project.id}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card-content row between"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="grow"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;&lt;strong&gt;${escapeHtml(project.name)}&lt;/strong&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="muted"&gt;${escapeHtml(project.location || '–')}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="fine"&gt;${project.structures.length} Bauwerke&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="actions"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="icon-btn" data-fav="${project.id}"&gt;${project.favorite ? '★' : '☆'}&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="icon-btn" data-edit-project="${project.id}"&gt;✎&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="icon-btn" data-delete-project="${project.id}"&gt;🗑&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;`).join('')}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;`; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function structuresView(project){ return `</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stack-md"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="row between"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="grow"&gt;&lt;div class="muted"&gt;Projekt&lt;/div&gt;&lt;div class="box"&gt;&lt;strong&gt;${escapeHtml(project?.name || '')}&lt;/strong&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button class="btn" data-action="open-structure-dialog"&gt;Bauwerk&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>${(project?.structures || []).length ? project.structures.map(structure =&gt; `&lt;button class="btn ${state.selectedStructureId===structure.id?'':'btn-outline'}" data-select-structure="${structure.id}"&gt;${escapeHtml(structure.name)}&lt;/button&gt;`).join('') : `&lt;div class="empty"&gt;Noch keine Bauwerke vorhanden.&lt;/div&gt;`}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;`; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function inspectionsView(structure){ return `</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stack-md"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="row between"&gt;&lt;div&gt;&lt;div class="muted"&gt;Bauwerk&lt;/div&gt;&lt;div&gt;&lt;strong&gt;${escapeHtml(structure?.name || '')}&lt;/strong&gt;&lt;/div&gt;&lt;/div&gt;&lt;button class="btn" data-action="create-inspection" ${!structure ? 'disabled':''}&gt;Neue Kontrolle&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="stack-sm"&gt;${(structure?.inspections || []).map(inspection =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="card ${state.selectedInspectionId===inspection.id?'selected':''}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card-content row between"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button class="plain-btn grow" data-select-inspection="${inspection.id}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;&lt;strong&gt;Kontrolle ${formatDate(inspection.date)}&lt;/strong&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="muted"&gt;${inspection.points.length} Prüfpunkte&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button class="btn btn-ghost btn-icon" data-delete-inspection="${inspection.id}"&gt;🗑&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;`).join('')}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn btn-outline" data-tab="neu" ${!selectedInspection() ? 'disabled':''}&gt;Neuer Prüfpunkt&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;`; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function pointFormView(){ return `</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stack-md"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="row between muted"&gt;&lt;div&gt;${state.editingPointId ? 'Prüfpunkt bearbeiten' : 'Eingabemaske für neuen Prüfpunkt'}&lt;/div&gt;${state.editingPointId ? '&lt;button class="btn btn-ghost btn-sm" data-action="cancel-edit"&gt;Abbrechen&lt;/button&gt;' : ''}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="stack-sm"&gt;&lt;label class="label"&gt;Bauteil *&lt;/label&gt;&lt;input class="input" value="${escapeAttr(state.form.component)}" placeholder="z. B. Fundament F5" data-form="component"&gt;&lt;div class="chip-wrap"&gt;${componentSuggestions().map(x =&gt; `&lt;button class="chip" data-chip-component="${escapeAttr(x)}"&gt;${escapeHtml(x)}&lt;/button&gt;`).join('')}&lt;/div&gt;${state.form.photoAttached &amp;&amp; state.form.photoNames.length ? `&lt;div class="fine"&gt;${escapeHtml(state.form.photoNames.join(', '))}&lt;/div&gt;` : ''}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="stack-sm"&gt;&lt;label class="label"&gt;Prüfaspekt&lt;/label&gt;&lt;input class="input" value="${escapeAttr(state.form.aspect)}" placeholder="optional" data-form="aspect"&gt;&lt;div class="chip-wrap"&gt;${aspectSuggestions().map(x =&gt; `&lt;button class="chip" data-chip-aspect="${escapeAttr(x)}"&gt;${escapeHtml(x)}&lt;/button&gt;`).join('')}&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="stack-sm"&gt;&lt;label class="label"&gt;Status *&lt;/label&gt;&lt;div class="status-grid"&gt;${['OK','Hinweis','Mangel'].map(status =&gt; `&lt;button class="status-btn ${state.form.status===status?'active':''}" data-status="${status}"&gt;${status}&lt;/button&gt;`).join('')}&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="stack-sm"&gt;&lt;label class="label"&gt;Anmerkung&lt;/label&gt;&lt;textarea class="textarea" placeholder="optional, auch per Spracheingabe denkbar" data-form="note"&gt;${escapeHtml(state.form.note)}&lt;/textarea&gt;&lt;div class="row wrap"&gt;&lt;button class="btn btn-outline" type="button" disabled&gt;Spracheingabe&lt;/button&gt;&lt;label class="btn ${state.form.photoAttached ? '' : 'btn-outline'}"&gt;&lt;input type="file" accept="image/*" capture="environment" multiple class="hidden" id="photo-input"&gt;${state.form.photoAttached ? `${state.form.photoCount || 1} Foto${(state.form.photoCount||1)&gt;1 ? 's':''} angehängt` : 'Foto aufnehmen'}&lt;/label&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="grid-3"&gt;&lt;button class="btn" data-save="close"&gt;${state.editingPointId ? 'Änderung speichern' : 'Speichern'}&lt;/button&gt;&lt;button class="btn btn-outline" data-save="keep"&gt;${state.editingPointId ? 'Speichern + weiter' : 'Speichern + nächster'}&lt;/button&gt;&lt;button class="btn btn-outline" data-save="new"&gt;Speichern + nächstes Bauteil&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;`; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function pointsView(inspection){ if (!inspection) return `&lt;div class="empty centered"&gt;Bitte zuerst eine Kontrolle anlegen oder auswählen.&lt;/div&gt;`; if (!inspection.points.length) return `&lt;div class="empty centered"&gt;Noch keine Prüfpunkte erfasst.&lt;/div&gt;`; return inspection.points.map(point =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card ${statusClass(point.status)}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-content stack-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="row between wrap"&gt;&lt;div&gt;&lt;div&gt;&lt;strong&gt;${escapeHtml(point.component)}&lt;/strong&gt;&lt;/div&gt;${point.aspect ? `&lt;div class="muted"&gt;${escapeHtml(point.aspect)}&lt;/div&gt;` : ''}&lt;/div&gt;&lt;span class="badge ${statusClass(point.status)}"&gt;${escapeHtml(point.status)}&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>${point.note ? `&lt;div&gt;${escapeHtml(point.note)}&lt;/div&gt;` : ''}</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="row between wrap fine"&gt;&lt;div class="row wrap"&gt;&lt;span&gt;${escapeHtml(point.createdAt || '')}&lt;/span&gt;&lt;span&gt;${point.photos ? `${point.photos} Foto` : 'kein Foto'}&lt;/span&gt;&lt;/div&gt;&lt;div class="actions"&gt;&lt;button class="btn btn-ghost btn-icon" data-edit-point="${point.id}"&gt;✎&lt;/button&gt;&lt;button class="btn btn-ghost btn-icon" data-delete-point="${point.id}"&gt;🗑&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;`).join(''); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function exportView(project, structure, inspection){ if (!inspection) return `&lt;div class="card"&gt;&lt;div class="card-content empty"&gt;Bitte zuerst eine Kontrolle auswählen oder anlegen.&lt;/div&gt;&lt;/div&gt;`; return `</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-header"&gt;&lt;div class="card-title"&gt;Exportvorschau&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-content stack-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="stack-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;&lt;strong&gt;Projekt:&lt;/strong&gt; ${escapeHtml(project?.name || '')}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;&lt;strong&gt;Bauwerk:&lt;/strong&gt; ${escapeHtml(structure?.name || '')}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;&lt;strong&gt;Datum:&lt;/strong&gt; ${formatDate(inspection.date)}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;&lt;strong&gt;Prüfer:&lt;/strong&gt; ${escapeHtml(inspection.inspector || 'Michel')}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;hr style="border:none;border-top:1px solid var(--border);width:100%;margin:0;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="stack-lg"&gt;${groupedPoints().map(([component, points]) =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="stack-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div&gt;&lt;strong&gt;Bauteil: ${escapeHtml(component)}&lt;/strong&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="stack-sm" style="padding-left:16px;"&gt;${points.map(point =&gt; `&lt;div&gt;${point.aspect ? `&lt;div&gt;&lt;strong&gt;${escapeHtml(point.aspect)} – ${escapeHtml(point.status)}&lt;/strong&gt;&lt;/div&gt;` : `&lt;div&gt;&lt;strong&gt;${escapeHtml(point.status)}&lt;/strong&gt;&lt;/div&gt;`}${point.note ? `&lt;div&gt;${escapeHtml(point.note)}&lt;/div&gt;` : ''}&lt;/div&gt;`).join('')}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;`).join('')}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;`; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function projectDialog(){ return `</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="dialog-backdrop" data-close-dialog="project"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="dialog" onclick="event.stopPropagation()"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="row between"&gt;&lt;div class="card-title"&gt;${state.projectForm.id ? 'Projekt bearbeiten' : 'Neues Projekt anlegen'}&lt;/div&gt;&lt;button class="btn btn-ghost btn-icon" data-close-dialog="project"&gt;×&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="stack-md" style="margin-top:12px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;&lt;label class="label"&gt;Projektname *&lt;/label&gt;&lt;input class="input" value="${escapeAttr(state.projectForm.name)}" data-project-form="name"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;&lt;label class="label"&gt;Ort&lt;/label&gt;&lt;input class="input" value="${escapeAttr(state.projectForm.location)}" data-project-form="location"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>${!state.projectForm.id ? `&lt;div&gt;&lt;label class="label"&gt;Erstes Bauwerk&lt;/label&gt;&lt;input class="input" value="${escapeAttr(state.projectForm.firstStructure)}" data-project-form="firstStructure"&gt;&lt;/div&gt;` : ''}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="grid-2"&gt;&lt;button class="btn" data-action="create-project" ${!state.projectForm.name.trim() ? 'disabled':''}&gt;${state.projectForm.id ? 'Speichern' : 'Anlegen'}&lt;/button&gt;&lt;button class="btn btn-outline" data-close-dialog="project"&gt;Abbrechen&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;`; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function structureDialog(){ return `</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="dialog-backdrop" data-close-dialog="structure"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="dialog" onclick="event.stopPropagation()"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="row between"&gt;&lt;div class="card-title"&gt;Neues Bauwerk anlegen&lt;/div&gt;&lt;button class="btn btn-ghost btn-icon" data-close-dialog="structure"&gt;×&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="stack-md" style="margin-top:12px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;&lt;label class="label"&gt;Bauwerk *&lt;/label&gt;&lt;input class="input" value="${escapeAttr(state.structureForm.name)}" data-structure-form="name"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="grid-2"&gt;&lt;button class="btn" data-action="create-structure" ${!state.structureForm.name.trim() ? 'disabled':''}&gt;Anlegen&lt;/button&gt;&lt;button class="btn btn-outline" data-close-dialog="structure"&gt;Abbrechen&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;`; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function statusClass(status){ return status === 'OK' ? 'status-ok' : status === 'Hinweis' ? 'status-hinweis' : 'status-mangel'; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function escapeHtml(str){ return String(str ?? '').replace(/[&amp;&lt;&gt;"']/g, s =&gt; ({'&amp;':'&amp;amp;','&lt;':'&amp;lt;','&gt;':'&amp;gt;','"':'&amp;quot;',"'":'&amp;#39;'}[s])); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function escapeAttr(str){ return escapeHtml(str).replace(/`/g, '&amp;#96;'); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function bindEvents(){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-tab]').forEach(el =&gt; el.onclick = () =&gt; update(() =&gt; { state.tab = el.dataset.tab; }));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const actionMap = {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>'toggle-nav': () =&gt; update(() =&gt; state.isMobileNavOpen = !state.isMobileNavOpen),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>'toggle-favorites': () =&gt; update(() =&gt; state.favoritesOnly = !state.favoritesOnly),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>'open-project-dialog': () =&gt; openProjectDialog(null),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>'open-structure-dialog': () =&gt; openStructureDialog(),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>'create-inspection': () =&gt; createInspection(),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>'cancel-edit': () =&gt; update(() =&gt; resetPointForm(false)),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>'create-project': () =&gt; createProject(),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>'create-structure': () =&gt; createStructure(),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>};</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-action]').forEach(el =&gt; el.onclick = () =&gt; actionMap[el.dataset.action]?.());</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-select-project]').forEach(el =&gt; el.onclick = () =&gt; selectProjectAction(state.projects.find(p =&gt; p.id === el.dataset.selectProject)));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-select-structure]').forEach(el =&gt; el.onclick = () =&gt; { const p = selectedProject(); const s = p?.structures.find(x =&gt; x.id === el.dataset.selectStructure); if (s) selectStructureAction(s); });</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-select-inspection]').forEach(el =&gt; el.onclick = () =&gt; update(() =&gt; state.selectedInspectionId = el.dataset.selectInspection));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-delete-inspection]').forEach(el =&gt; el.onclick = () =&gt; deleteInspection(el.dataset.deleteInspection));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-delete-project]').forEach(el =&gt; el.onclick = (e) =&gt; { e.stopPropagation(); deleteProject(el.dataset.deleteProject); } );</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-fav]').forEach(el =&gt; el.onclick = (e) =&gt; { e.stopPropagation(); toggleFavorite(el.dataset.fav); } );</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-edit-project]').forEach(el =&gt; el.onclick = (e) =&gt; { e.stopPropagation(); const p = state.projects.find(x =&gt; x.id === el.dataset.editProject); if (p) openProjectDialog(p); });</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-chip-component]').forEach(el =&gt; el.onclick = () =&gt; update(() =&gt; state.form.component = el.dataset.chipComponent));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-chip-aspect]').forEach(el =&gt; el.onclick = () =&gt; update(() =&gt; state.form.aspect = el.dataset.chipAspect));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-status]').forEach(el =&gt; el.onclick = () =&gt; update(() =&gt; state.form.status = el.dataset.status));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-edit-point]').forEach(el =&gt; el.onclick = () =&gt; editPoint(el.dataset.editPoint));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-delete-point]').forEach(el =&gt; el.onclick = () =&gt; deletePoint(el.dataset.deletePoint));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-save]').forEach(el =&gt; el.onclick = () =&gt; savePoint(el.dataset.save === 'close' ? { closeAfter:true } : el.dataset.save === 'keep' ? { keepComponent:true } : {}));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-close-dialog]').forEach(el =&gt; el.onclick = () =&gt; update(() =&gt; state.dialogs[el.dataset.closeDialog] = false));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-field="search"]').forEach(el =&gt; el.oninput = () =&gt; update(() =&gt; state.search = el.value));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-form]').forEach(el =&gt; el.oninput = () =&gt; update(() =&gt; state.form[el.dataset.form] = el.value));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-project-form]').forEach(el =&gt; el.oninput = () =&gt; { state.projectForm[el.dataset.projectForm] = el.value; render(); });</p>
+<p class="p1"><span class="Apple-converted-space">      </span>document.querySelectorAll('[data-structure-form]').forEach(el =&gt; el.oninput = () =&gt; { state.structureForm[el.dataset.structureForm] = el.value; render(); });</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const photoInput = document.getElementById('photo-input');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (photoInput) photoInput.onchange = () =&gt; update(() =&gt; { const files = Array.from(photoInput.files || []); state.form.photoAttached = files.length &gt; 0; state.form.photoCount = files.length; state.form.photoNames = files.map(f =&gt; f.name || 'Foto'); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>render();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
