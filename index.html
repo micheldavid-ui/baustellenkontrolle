@@ -71,8 +71,10 @@
     .selected { border-color:var(--strong); }
     .muted { color:var(--muted); font-size:.92rem; }
     .fine { color:var(--muted); font-size:.8rem; }
-    .icon-btn { border-radius:999px; padding:8px; display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; color:var(--text); }
-    .ui-icon { width:22px; height:22px; display:block; }
+    .icon-btn { border-radius:999px; padding:8px; display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; color:var(--text); }
+    .btn-icon { width:48px; height:48px; min-width:48px; padding:0; }
+    .ui-icon { width:28px; height:28px; display:block; }
+    .ui-icon path { vector-effect: non-scaling-stroke; }
     .ui-icon.is-filled path:first-child { fill: currentColor; }
     .star-active { color:#d97706; }
     .box, .empty { border:1px solid var(--border); border-radius:18px; background:#f8fafc; padding:12px 14px; }
@@ -101,6 +103,9 @@
     }
     @media (max-width: 1023px) {
       .desktop-only { display:none !important; }
+      .icon-btn { width:52px; height:52px; }
+      .btn-icon { width:52px; height:52px; min-width:52px; }
+      .ui-icon { width:32px; height:32px; }
     }
   </style>
 </head>
