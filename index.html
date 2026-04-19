@@ -10,7 +10,7 @@
     *{box-sizing:border-box} html,body{margin:0;min-height:100%} body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
     .app{max-width:1400px;margin:0 auto;padding:12px 12px 92px}.topbar{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}.title{margin:0;font-size:1.8rem}.subtitle{margin:6px 0 0;color:var(--muted);font-size:.92rem}
     .row,.actions{display:flex;align-items:center;gap:8px}.between{justify-content:space-between}.wrap{flex-wrap:wrap}.grow{flex:1;min-width:0}.layout{display:grid;gap:24px}.content-grid{display:flex;flex-direction:column;gap:24px}
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow)}.card-header{padding:18px 18px 0}.card-title{font-size:1.1rem;font-weight:700}.card-content{padding:18px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow)}.card-header{padding:18px 18px 0}.card-title{font-size:1.1rem;font-weight:700}.card-content{padding:18px}.structure-name{font-size:1rem;font-weight:700;line-height:1.25}.inspection-meta{font-size:.84rem;color:var(--muted)}.component-group{border:1px solid var(--border);border-radius:18px;padding:14px;background:#fff}.component-group-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.component-title{font-size:1rem;font-weight:700}.component-count{font-size:.8rem;color:var(--muted)}.point-entry{border:1px solid var(--border);border-radius:16px;padding:14px}.point-entry + .point-entry{margin-top:10px}
     .badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;background:#fff;padding:7px 12px;font-size:.82rem}
     .btn,button.btn,label.btn{border:1px solid transparent;background:var(--primary);color:var(--primary-contrast);border-radius:14px;padding:11px 14px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;text-decoration:none}
     .btn:hover{opacity:.95}.btn:disabled{opacity:.5;cursor:not-allowed}.btn-outline{background:#fff;color:var(--text);border-color:var(--border)}.btn-ghost{background:transparent;color:var(--text)}.btn-icon{width:48px;height:48px;min-width:48px;padding:0;border-radius:999px}.btn-sm{min-height:36px;padding:8px 12px}
@@ -22,21 +22,8 @@
     .icon-btn{border-radius:999px;padding:8px;display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;color:var(--text)}.ui-icon{width:28px;height:28px;display:block}.ui-icon.is-filled path:first-child{fill:currentColor}
     .box,.empty{border:1px solid var(--border);border-radius:18px;background:#f8fafc;padding:12px 14px}.empty{border-style:dashed;color:var(--muted)}.centered{text-align:center;padding:30px 16px}.chip-wrap{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--border);border-radius:999px;background:#fff;padding:7px 12px;font-size:.76rem}
     .status-btn{display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--border);border-radius:14px;background:#fff;padding:12px}.status-ok{border-color:var(--ok-border);background:var(--ok-bg);color:var(--ok-text)}.status-hinweis{border-color:var(--hint-border);background:var(--hint-bg);color:var(--hint-text)}.status-mangel{border-color:var(--defect-border);background:var(--defect-bg);color:var(--defect-text)}
-    .dialog-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.38);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}.dialog{width:min(100%,520px);background:#fff;border-radius:20px;border:1px solid var(--border);box-shadow:var(--shadow);padding:18px}
-    .bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:40;border-top:1px solid var(--border);background:rgba(255,255,255,.95);backdrop-filter:blur(8px)}.bottom-nav-grid{grid-template-columns:repeat(3,1fr);max-width:1400px;margin:0 auto;padding:8px 12px}.bottom-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:12px;padding:8px;font-size:.78rem}.hidden{display:none!important}.photo-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.photo-thumb{width:76px;height:76px;border-radius:12px;border:1px solid var(--border);overflow:hidden;background:#e2e8f0;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
-.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.photo-thumb.placeholder{font-size:.72rem;color:var(--muted);padding:8px;text-align:center}
-.photo-modal{position:fixed;inset:0;background:rgba(15,23,42,.72);display:flex;align-items:center;justify-content:center;padding:18px;z-index:120}
-.photo-modal-box{width:min(100%,960px);max-height:100%;display:flex;flex-direction:column;gap:12px}
-.photo-modal-stage{position:relative;display:flex;align-items:center;justify-content:center;min-height:220px}
-.photo-modal-box img{max-width:100%;max-height:78vh;border-radius:16px;background:#fff;touch-action:pan-y}
-.photo-modal-head{display:flex;justify-content:space-between;align-items:center;color:#fff;gap:12px}
-.photo-modal-meta{color:#e2e8f0;font-size:.88rem;text-align:center}
-.photo-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:none;border-radius:999px;background:rgba(15,23,42,.45);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer}
-.photo-nav.prev{left:8px}
-.photo-nav.next{right:8px}
-
+    .photo-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.photo-thumb{width:72px;height:72px;border:1px solid var(--border);border-radius:12px;background:#fff;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;padding:0}.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}.photo-placeholder{font-size:.72rem;color:var(--muted);padding:8px;text-align:center}.photo-viewer-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.76);display:flex;align-items:center;justify-content:center;padding:16px;z-index:110}.photo-viewer{width:min(100%,860px);max-height:100%;background:#fff;border-radius:20px;overflow:hidden;display:flex;flex-direction:column}.photo-viewer-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}.photo-viewer-body{padding:12px;overflow:auto}.photo-viewer-body img{width:100%;height:auto;display:block;border-radius:14px;background:#f1f5f9}.dialog-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.38);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}.dialog{width:min(100%,520px);background:#fff;border-radius:20px;border:1px solid var(--border);box-shadow:var(--shadow);padding:18px}
+    .bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:40;border-top:1px solid var(--border);background:rgba(255,255,255,.95);backdrop-filter:blur(8px)}.bottom-nav-grid{grid-template-columns:repeat(3,1fr);max-width:1400px;margin:0 auto;padding:8px 12px}.bottom-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:12px;padding:8px;font-size:.78rem}.hidden{display:none!important}
     @media (min-width:1024px){.app{padding:16px}.topbar{flex-direction:row;align-items:center;justify-content:space-between}.layout{grid-template-columns:320px 1fr}.content-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px}.bottom-nav,.mobile-only,.mobile-inline{display:none!important}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media (max-width:1023px){.desktop-only{display:none!important}.icon-btn,.btn-icon{width:52px;height:52px;min-width:52px}.ui-icon{width:32px;height:32px}}
   </style>
@@ -44,28 +31,150 @@
 <body>
 <div id="app"></div>
 <script>
-var STORAGE_KEY='baustellenkontrolle_singlefile_v3';
+var STORAGE_KEY='baustellenkontrolle_singlefile_v2';
 var STANDARD_COMPONENTS=['Fundament','Einzelfundament','Streifenfundament','Bodenplatte','Wand','Stütze','Unterzug','Überzug','Decke','Treppe','Balkonplatte','Attika','Ringbalken','Ringanker','Sturz','Binder','Pfette','Mauerwerk','Fertigteilwand','Fertigteildecke'];
 var ASPECT_SUGGESTIONS=['untere Bewehrung','obere Bewehrung','Schubbewehrung','Anschlussbewehrung','Bügel','Betondeckung','Durchstanzbewehrung','Schalung','Abmessungen','Einbauteile'];
 var pendingFocus=null;
 var pendingPhotoFiles=[];
-var activePhotoModal=null;
-var photoSwipeStartX=null;
-function openPhotoGallery(items,startIndex){ if(!items||!items.length) return; activePhotoModal={items:items,index:Math.max(0,Math.min(startIndex||0,items.length-1))}; render(); }
-function changeActivePhoto(step){ if(!activePhotoModal||!activePhotoModal.items||!activePhotoModal.items.length) return; var len=activePhotoModal.items.length; activePhotoModal.index=(activePhotoModal.index+step+len)%len; render(); }
-function openPhotoDb(){return new Promise(function(resolve,reject){var req=indexedDB.open('baustellenkontrolle_photos',1);req.onupgradeneeded=function(e){var db=e.target.result;if(!db.objectStoreNames.contains('photos'))db.createObjectStore('photos',{keyPath:'id'})};req.onsuccess=function(){resolve(req.result)};req.onerror=function(){reject(req.error)}})}
-function storePhotoFiles(files){if(!files||!files.length)return Promise.resolve([]);return openPhotoDb().then(function(db){return Promise.all(files.map(function(file){return new Promise(function(resolve,reject){var id='ph_'+Date.now()+'_'+Math.random().toString(36).slice(2,9);var tx=db.transaction('photos','readwrite');tx.objectStore('photos').put({id:id,blob:file,name:file.name||'Foto',type:file.type||'',createdAt:new Date().toISOString()});tx.oncomplete=function(){resolve({id:id,name:file.name||'Foto'})};tx.onerror=function(){reject(tx.error)}})}))})}
-function getPhotoBlob(id){return openPhotoDb().then(function(db){return new Promise(function(resolve,reject){var tx=db.transaction('photos','readonly');var req=tx.objectStore('photos').get(id);req.onsuccess=function(){resolve(req.result?req.result.blob:null)};req.onerror=function(){reject(req.error)}})})}
-function deletePhotoRefs(refs){refs=refs||[];if(!refs.length)return Promise.resolve();return openPhotoDb().then(function(db){return Promise.all(refs.map(function(ref){return new Promise(function(resolve,reject){var tx=db.transaction('photos','readwrite');tx.objectStore('photos').delete(ref.id);tx.oncomplete=function(){resolve()};tx.onerror=function(){reject(tx.error)}})}))})}
-function collectPointPhotoRefs(point){return (point&&point.photoRefs)||[]}
-function collectInspectionPhotoRefs(inspection){var refs=[];(inspection&&inspection.points||[]).forEach(function(point){refs=refs.concat(collectPointPhotoRefs(point))});return refs}
-function collectStructurePhotoRefs(structure){var refs=[];(structure&&structure.inspections||[]).forEach(function(inspection){refs=refs.concat(collectInspectionPhotoRefs(inspection))});return refs}
-function collectProjectPhotoRefs(project){var refs=[];(project&&project.structures||[]).forEach(function(structure){refs=refs.concat(collectStructurePhotoRefs(structure))});return refs}
-
-function initialState(){return{projects:[{id:'p1',name:'Wohnanlage Musterstraße',location:'Hamburg',favorite:true,structures:[{id:'s1',name:'Gebäude A',inspections:[{id:'i1',date:'2026-04-17',inspector:'Michel',points:[{id:'pt1',component:'Fundament F5',aspect:'untere Bewehrung',status:'Mangel',note:'zu große Abstände',photos:1,createdAt:'09:10',photoNames:[]},{id:'pt2',component:'Fundament F5',aspect:'obere Bewehrung',status:'OK',note:'',photos:0,createdAt:'09:14',photoNames:[]},{id:'pt3',component:'Wand W2',aspect:'Schubbewehrung',status:'Mangel',note:'fehlt unterhalb der Wand',photos:2,createdAt:'09:22',photoNames:[]}]}]},{id:'s2',name:'Gebäude B',inspections:[]},{id:'s3',name:'Tiefgarage',inspections:[]}]},{id:'p2',name:'Logistikhalle Nord',location:'Bremen',favorite:true,structures:[{id:'s4',name:'Halle 1',inspections:[]}]},{id:'p3',name:'Parkhaus Innenstadt',location:'Kiel',favorite:false,structures:[{id:'s5',name:'Bauwerk Ost',inspections:[]},{id:'s6',name:'Bauwerk West',inspections:[]}]}],selectedProjectId:'p1',selectedStructureId:'s1',selectedInspectionId:'i1',tab:'projekte',search:'',favoritesOnly:false,editingPointId:null,isMobileNavOpen:true,dialogs:{project:false,structure:false},projectForm:{id:null,name:'',location:'',firstStructure:''},structureForm:{id:null,name:''},form:{component:'',aspect:'',status:'OK',note:'',photoAttached:false,photoCount:0,photoNames:[]}}}
+var pendingPhotoUrls=[];
+var photoDbPromise=null;
+var photoUrlCache={};
+var activePhotoViewer=null;
+function initialState(){return{projects:[{id:'p1',name:'Wohnanlage Musterstraße',location:'Hamburg',favorite:true,structures:[{id:'s1',name:'Gebäude A',inspections:[{id:'i1',date:'2026-04-17',inspector:'Michel',points:[{id:'pt1',component:'Fundament F5',aspect:'untere Bewehrung',status:'Mangel',note:'zu große Abstände',photos:1,createdAt:'09:10',photoNames:[]},{id:'pt2',component:'Fundament F5',aspect:'obere Bewehrung',status:'OK',note:'',photos:0,createdAt:'09:14',photoNames:[]},{id:'pt3',component:'Wand W2',aspect:'Schubbewehrung',status:'Mangel',note:'fehlt unterhalb der Wand',photos:2,createdAt:'09:22',photoNames:[]}]}]},{id:'s2',name:'Gebäude B',inspections:[]},{id:'s3',name:'Tiefgarage',inspections:[]}]},{id:'p2',name:'Logistikhalle Nord',location:'Bremen',favorite:true,structures:[{id:'s4',name:'Halle 1',inspections:[]}]},{id:'p3',name:'Parkhaus Innenstadt',location:'Kiel',favorite:false,structures:[{id:'s5',name:'Bauwerk Ost',inspections:[]},{id:'s6',name:'Bauwerk West',inspections:[]}]}],selectedProjectId:'p1',selectedStructureId:'s1',selectedInspectionId:'i1',tab:'projekte',search:'',favoritesOnly:false,editingPointId:null,isMobileNavOpen:true,dialogs:{project:false,structure:false},projectForm:{id:null,name:'',location:'',firstStructure:''},structureForm:{id:null,name:''},form:{component:'',aspect:'',status:'OK',note:'',photoAttached:false,photoCount:0,photoNames:[],photoRefs:[]}}}
 function loadState(){try{var raw=localStorage.getItem(STORAGE_KEY);return raw?JSON.parse(raw):null}catch(e){return null}}
 var state=loadState()||initialState();
+normalizeState(state);
+
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
+function normalizeState(snapshot){
+  if(!snapshot.dialogs)snapshot.dialogs={project:false,structure:false};
+  if(!snapshot.projectForm)snapshot.projectForm={id:null,name:'',location:'',firstStructure:''};
+  if(!snapshot.structureForm)snapshot.structureForm={id:null,name:''};
+  if(!snapshot.form)snapshot.form={component:'',aspect:'',status:'OK',note:'',photoAttached:false,photoCount:0,photoNames:[],photoRefs:[]};
+  if(!snapshot.form.photoRefs)snapshot.form.photoRefs=[];
+  snapshot.projects=(snapshot.projects||[]).map(function(project){
+    project.structures=(project.structures||[]).map(function(structure){
+      structure.inspections=(structure.inspections||[]).map(function(inspection){
+        inspection.points=(inspection.points||[]).map(function(point){
+          if(!point.photoRefs)point.photoRefs=[];
+          if(!point.photoNames)point.photoNames=point.photoRefs.map(function(ref){return ref.name||'Foto'});
+          point.photos=point.photoRefs.length||point.photos||0;
+          return point;
+        });
+        return inspection;
+      });
+      return structure;
+    });
+    return project;
+  });
+}
+function openPhotoDb(){
+  if(photoDbPromise)return photoDbPromise;
+  photoDbPromise=new Promise(function(resolve,reject){
+    var req=indexedDB.open('baustellenkontrolle_photos_v1',1);
+    req.onupgradeneeded=function(){
+      var db=req.result;
+      if(!db.objectStoreNames.contains('photos'))db.createObjectStore('photos',{keyPath:'id'});
+    };
+    req.onsuccess=function(){resolve(req.result)};
+    req.onerror=function(){reject(req.error||new Error('IndexedDB konnte nicht geöffnet werden'))};
+  });
+  return photoDbPromise;
+}
+function putPhotoRecord(record){
+  return openPhotoDb().then(function(db){
+    return new Promise(function(resolve,reject){
+      var tx=db.transaction('photos','readwrite');
+      tx.objectStore('photos').put(record);
+      tx.oncomplete=function(){resolve(record)};
+      tx.onerror=function(){reject(tx.error||new Error('Foto konnte nicht gespeichert werden'))};
+    });
+  });
+}
+function getPhotoRecord(id){
+  return openPhotoDb().then(function(db){
+    return new Promise(function(resolve,reject){
+      var tx=db.transaction('photos','readonly');
+      var req=tx.objectStore('photos').get(id);
+      req.onsuccess=function(){resolve(req.result||null)};
+      req.onerror=function(){reject(req.error||new Error('Foto konnte nicht geladen werden'))};
+    });
+  });
+}
+function deletePhotoRecord(id){
+  return openPhotoDb().then(function(db){
+    return new Promise(function(resolve,reject){
+      var tx=db.transaction('photos','readwrite');
+      tx.objectStore('photos')['delete'](id);
+      tx.oncomplete=function(){resolve()};
+      tx.onerror=function(){reject(tx.error||new Error('Foto konnte nicht gelöscht werden'))};
+    });
+  });
+}
+function revokePendingPhotoUrls(){
+  pendingPhotoUrls.forEach(function(url){try{URL.revokeObjectURL(url)}catch(e){}});
+  pendingPhotoUrls=[];
+}
+function resetPendingPhotos(){
+  pendingPhotoFiles=[];
+  revokePendingPhotoUrls();
+}
+function createPendingPhotoUrls(files){
+  revokePendingPhotoUrls();
+  pendingPhotoUrls=files.map(function(file){return URL.createObjectURL(file)});
+}
+function ensurePhotoUrl(photoId){
+  if(photoUrlCache[photoId])return Promise.resolve(photoUrlCache[photoId]);
+  return getPhotoRecord(photoId).then(function(record){
+    if(!record||!record.blob)return '';
+    var url=URL.createObjectURL(record.blob);
+    photoUrlCache[photoId]=url;
+    return url;
+  }).catch(function(){return ''});
+}
+function deletePhotoRefs(refs){
+  refs=(refs||[]).filter(function(ref){return ref&&ref.id});
+  return Promise.all(refs.map(function(ref){
+    if(photoUrlCache[ref.id]){try{URL.revokeObjectURL(photoUrlCache[ref.id])}catch(e){} delete photoUrlCache[ref.id];}
+    return deletePhotoRecord(ref.id).catch(function(){});
+  }));
+}
+function savePendingPhotos(){
+  var files=pendingPhotoFiles.slice();
+  if(!files.length)return Promise.resolve([]);
+  return Promise.all(files.map(function(file,index){
+    var id='ph'+Date.now()+'_'+index+'_'+Math.random().toString(36).slice(2,8);
+    return putPhotoRecord({id:id,blob:file,name:file.name||('Foto '+(index+1)),type:file.type||'image/jpeg',size:file.size||0,createdAt:Date.now()}).then(function(){
+      return {id:id,name:file.name||('Foto '+(index+1)),type:file.type||'image/jpeg',size:file.size||0};
+    });
+  }));
+}
+function hydratePhotoPreviews(){
+  document.querySelectorAll('[data-photo-ref]').forEach(function(img){
+    var id=img.getAttribute('data-photo-ref');
+    if(!id)return;
+    ensurePhotoUrl(id).then(function(url){
+      if(url)img.src=url;
+    });
+  });
+}
+function photoStripHtml(refs, tempUrls){
+  refs=refs||[]; tempUrls=tempUrls||[];
+  if(!refs.length && !tempUrls.length)return '';
+  var existing=refs.map(function(ref){return '<button type="button" class="photo-thumb" data-open-photo="'+escapeAttr(ref.id)+'" aria-label="Foto öffnen"><img alt="'+escapeAttr(ref.name||'Foto')+'" data-photo-ref="'+escapeAttr(ref.id)+'"></button>';}).join('');
+  var temp=tempUrls.map(function(url,idx){return '<span class="photo-thumb"><img alt="Ausgewähltes Foto '+String(idx+1)+'" src="'+escapeAttr(url)+'"></span>';}).join('');
+  return '<div class="photo-strip">'+existing+temp+'</div>';
+}
+function photoViewerHtml(){
+  if(!activePhotoViewer)return '';
+  return '<div class="photo-viewer-backdrop" data-close-photo-viewer="1"><div class="photo-viewer" onclick="event.stopPropagation()"><div class="photo-viewer-head"><strong>'+escapeHtml(activePhotoViewer.name||'Foto')+'</strong><button class="btn btn-ghost btn-icon" data-close-photo-viewer="1">×</button></div><div class="photo-viewer-body"><img alt="'+escapeAttr(activePhotoViewer.name||'Foto')+'" data-photo-ref="'+escapeAttr(activePhotoViewer.id)+'"></div></div></div>';
+}
+function collectPhotoRefsFromPoint(point){return (point&&point.photoRefs)||[]}
+function collectPhotoRefsFromInspection(inspection){var refs=[];(inspection&&inspection.points||[]).forEach(function(point){refs=refs.concat(collectPhotoRefsFromPoint(point))});return refs}
+function collectPhotoRefsFromStructure(structure){var refs=[];(structure&&structure.inspections||[]).forEach(function(inspection){refs=refs.concat(collectPhotoRefsFromInspection(inspection))});return refs}
+function collectPhotoRefsFromProject(project){var refs=[];(project&&project.structures||[]).forEach(function(structure){refs=refs.concat(collectPhotoRefsFromStructure(structure))});return refs}
+function openPhotoViewer(id,name){activePhotoViewer={id:id,name:name||'Foto'};render()}
+function closePhotoViewer(){activePhotoViewer=null;render()}
 function todayIso(){return new Date().toISOString().slice(0,10)} function nowTime(){return new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})} function formatDate(d){return new Date(d).toLocaleDateString('de-DE',{year:'numeric',month:'2-digit',day:'2-digit'})}
 function cls(){return Array.prototype.slice.call(arguments).filter(Boolean).join(' ')}
 function selectedProject(){var p=state.projects.find(function(x){return x.id===state.selectedProjectId});return p||state.projects[0]||null}
@@ -77,82 +186,156 @@ function componentSuggestions(){var set=new Set(STANDARD_COMPONENTS),project=sel
 function aspectSuggestions(){var q=state.form.aspect.trim().toLowerCase();return (!q?ASPECT_SUGGESTIONS:ASPECT_SUGGESTIONS.filter(function(x){return x.toLowerCase().indexOf(q)!==-1})).slice(0,6)}
 function ensureSelection(){if(!state.projects.length)return;if(!state.projects.some(function(x){return x.id===state.selectedProjectId}))state.selectedProjectId=state.projects[0].id;var p=selectedProject();if(p&&!p.structures.some(function(x){return x.id===state.selectedStructureId}))state.selectedStructureId=p.structures[0]?p.structures[0].id:'';var s=selectedStructure();if(s&&!s.inspections.some(function(x){return x.id===state.selectedInspectionId}))state.selectedInspectionId=s.inspections[0]?s.inspections[0].id:''}
 function update(mutator){mutator();ensureSelection();saveState();render()}
-function resetPointForm(keep){state.form={component:keep?state.form.component:'',aspect:'',status:'OK',note:'',photoAttached:false,photoCount:0,photoNames:[],photoRefs:[]};state.editingPointId=null;pendingPhotoFiles=[]}
+function resetPointForm(keep){resetPendingPhotos();state.form={component:keep?state.form.component:'',aspect:'',status:'OK',note:'',photoAttached:false,photoCount:0,photoNames:[],photoRefs:[]};state.editingPointId=null}
 function openProjectDialog(edit){state.projectForm=edit?{id:edit.id,name:edit.name,location:edit.location||'',firstStructure:''}:{id:null,name:'',location:'',firstStructure:''};state.dialogs.project=true;render()}
 function openStructureDialog(edit){state.structureForm=edit?{id:edit.id,name:edit.name}:{id:null,name:''};state.dialogs.structure=true;render()}
 function selectProjectAction(project){update(function(){state.selectedProjectId=project.id;state.selectedStructureId=project.structures[0]?project.structures[0].id:'';state.selectedInspectionId=project.structures[0]&&project.structures[0].inspections[0]?project.structures[0].inspections[0].id:'';state.tab='bauwerke'})}
 function selectStructureAction(structure){update(function(){state.selectedStructureId=structure.id;state.selectedInspectionId=structure.inspections[0]?structure.inspections[0].id:'';state.tab='kontrollen'})}
 function createProject(){if(!state.projectForm.name.trim())return;update(function(){if(state.projectForm.id){state.projects=state.projects.map(function(project){return project.id!==state.projectForm.id?project:{id:project.id,name:state.projectForm.name.trim(),location:state.projectForm.location.trim(),favorite:project.favorite,structures:project.structures}})}else{var stamp=Date.now();var newProject={id:'p'+stamp,name:state.projectForm.name.trim(),location:state.projectForm.location.trim(),favorite:false,structures:[{id:'s'+stamp,name:state.projectForm.firstStructure.trim()||'Bauwerk 1',inspections:[]}]};state.projects.unshift(newProject);state.selectedProjectId=newProject.id;state.selectedStructureId=newProject.structures[0].id;state.selectedInspectionId='';state.tab='bauwerke'}state.dialogs.project=false;state.projectForm={id:null,name:'',location:'',firstStructure:''}})}
 function createStructure(){var project=selectedProject();if(!project||!state.structureForm.name.trim())return;update(function(){if(state.structureForm.id){project.structures=project.structures.map(function(structure){return structure.id!==state.structureForm.id?structure:{id:structure.id,name:state.structureForm.name.trim(),inspections:structure.inspections}});state.selectedStructureId=state.structureForm.id}else{var stamp=Date.now();var newStructure={id:'s'+stamp,name:state.structureForm.name.trim(),inspections:[]};project.structures.push(newStructure);state.selectedStructureId=newStructure.id;state.selectedInspectionId=''}state.tab='bauwerke';state.dialogs.structure=false;state.structureForm={id:null,name:''}})}
-function deleteStructure(id){var project=selectedProject();if(!project)return;var structure=project.structures.find(function(x){return x.id===id});var refs=collectStructurePhotoRefs(structure);deletePhotoRefs(refs).catch(function(){});update(function(){project.structures=project.structures.filter(function(structure){return structure.id!==id});var first=project.structures[0];state.selectedStructureId=first?first.id:'';state.selectedInspectionId=first&&first.inspections[0]?first.inspections[0].id:''})}
+function deleteStructure(id){var project=selectedProject();if(!project)return;update(function(){project.structures=project.structures.filter(function(structure){return structure.id!==id});var first=project.structures[0];state.selectedStructureId=first?first.id:'';state.selectedInspectionId=first&&first.inspections[0]?first.inspections[0].id:''})}
 function createInspection(){var structure=selectedStructure();if(!structure)return;update(function(){var newInspection={id:'i'+Date.now(),date:todayIso(),inspector:'Michel',points:[]};structure.inspections.unshift(newInspection);state.selectedInspectionId=newInspection.id;state.tab='kontrollen'})}
-function deleteInspection(id){var structure=selectedStructure();if(!structure)return;var inspection=structure.inspections.find(function(x){return x.id===id});deletePhotoRefs(collectInspectionPhotoRefs(inspection)).catch(function(){});update(function(){structure.inspections=structure.inspections.filter(function(i){return i.id!==id});if(state.selectedInspectionId===id)state.selectedInspectionId=structure.inspections[0]?structure.inspections[0].id:''})}
+function deleteInspection(id){var structure=selectedStructure();if(!structure)return;update(function(){structure.inspections=structure.inspections.filter(function(i){return i.id!==id});if(state.selectedInspectionId===id)state.selectedInspectionId=structure.inspections[0]?structure.inspections[0].id:''})}
 function deleteProject(id){update(function(){state.projects=state.projects.filter(function(p){return p.id!==id});var p=state.projects[0];if(p){state.selectedProjectId=p.id;state.selectedStructureId=p.structures[0]?p.structures[0].id:'';state.selectedInspectionId=p.structures[0]&&p.structures[0].inspections[0]?p.structures[0].inspections[0].id:''}else{state.selectedProjectId='';state.selectedStructureId='';state.selectedInspectionId=''}})}
 function toggleFavorite(id){update(function(){var p=state.projects.find(function(x){return x.id===id});if(p)p.favorite=!p.favorite})}
-function savePoint(opts){opts=opts||{};var inspection=selectedInspection();if(!inspection||!state.form.component.trim())return;var existingRefs=(state.form.photoRefs||[]).slice();storePhotoFiles(pendingPhotoFiles).then(function(newRefs){update(function(){var mergedRefs=existingRefs.concat(newRefs);var mergedNames=mergedRefs.map(function(ref){return ref.name||'Foto'});var payload={component:state.form.component.trim(),aspect:state.form.aspect.trim(),status:state.form.status,note:state.form.note.trim(),photos:mergedRefs.length,photoNames:mergedNames,photoRefs:mergedRefs};if(state.editingPointId){inspection.points=inspection.points.map(function(p){return p.id!==state.editingPointId?p:{id:p.id,component:payload.component,aspect:payload.aspect,status:payload.status,note:payload.note,photos:payload.photos,photoNames:payload.photoNames,photoRefs:payload.photoRefs,createdAt:p.createdAt}})}else{inspection.points.unshift({id:'pt'+Date.now(),component:payload.component,aspect:payload.aspect,status:payload.status,note:payload.note,photos:payload.photos,photoNames:payload.photoNames,photoRefs:payload.photoRefs,createdAt:nowTime()})}resetPointForm(!!opts.keepComponent);if(opts.closeAfter)state.tab='kontrollen'})}).catch(function(err){console.error(err);alert('Fotos konnten nicht gespeichert werden.')})}
-function editPoint(id){var inspection=selectedInspection();if(!inspection)return;var point=inspection.points.find(function(p){return p.id===id});if(!point)return;state.editingPointId=id;pendingPhotoFiles=[];state.form={component:point.component,aspect:point.aspect,status:point.status,note:point.note,photoAttached:(point.photos||0)>0,photoCount:point.photos||0,photoNames:point.photoNames||[],photoRefs:point.photoRefs||[]};state.tab='neu';saveState();render()}
-function deletePoint(id){var inspection=selectedInspection();if(!inspection)return;var point=inspection.points.find(function(p){return p.id===id});deletePhotoRefs(collectPointPhotoRefs(point)).catch(function(){});update(function(){inspection.points=inspection.points.filter(function(p){return p.id!==id});if(state.editingPointId===id)resetPointForm(false)})}
-function groupedPoints(){var inspection=selectedInspection(),map=new Map();(inspection?inspection.points:[]).forEach(function(point){var key=(point.component||'').trim()||'Ohne Bauteil';if(!map.has(key))map.set(key,[]);map.get(key).push(point)});return Array.from(map.entries())}
+
+function savePoint(opts){
+  opts=opts||{};
+  var inspection=selectedInspection();
+  if(!inspection||!state.form.component.trim())return;
+  var existingPoint=state.editingPointId?inspection.points.find(function(p){return p.id===state.editingPointId}):null;
+  var oldRefs=existingPoint?(existingPoint.photoRefs||[]):[];
+  savePendingPhotos().then(function(newRefs){
+    var finalRefs=pendingPhotoFiles.length?newRefs:(state.form.photoRefs||oldRefs||[]);
+    update(function(){
+      var payload={
+        component:state.form.component.trim(),
+        aspect:state.form.aspect.trim(),
+        status:state.form.status,
+        note:state.form.note.trim(),
+        photos:finalRefs.length,
+        photoNames:finalRefs.map(function(ref){return ref.name||'Foto'}),
+        photoRefs:finalRefs
+      };
+      if(state.editingPointId){
+        inspection.points=inspection.points.map(function(p){
+          return p.id!==state.editingPointId?p:{id:p.id,component:payload.component,aspect:payload.aspect,status:payload.status,note:payload.note,photos:payload.photos,photoNames:payload.photoNames,photoRefs:payload.photoRefs,createdAt:p.createdAt};
+        });
+      }else{
+        inspection.points.unshift({id:'pt'+Date.now(),component:payload.component,aspect:payload.aspect,status:payload.status,note:payload.note,photos:payload.photos,photoNames:payload.photoNames,photoRefs:payload.photoRefs,createdAt:nowTime()});
+      }
+      resetPointForm(!!opts.keepComponent);
+      if(opts.closeAfter)state.tab='kontrollen';
+    });
+    if(existingPoint&&pendingPhotoFiles.length)deletePhotoRefs(oldRefs);
+  }).catch(function(err){
+    alert(err&&err.message?err.message:'Fotos konnten nicht gespeichert werden.');
+  });
+}
+function editPoint(id){
+  var inspection=selectedInspection(); if(!inspection)return;
+  var point=inspection.points.find(function(p){return p.id===id}); if(!point)return;
+  state.editingPointId=id;
+  resetPendingPhotos();
+  state.form={component:point.component,aspect:point.aspect,status:point.status,note:point.note,photoAttached:(point.photoRefs||[]).length>0,photoCount:(point.photoRefs||[]).length||point.photos||0,photoNames:point.photoNames||[],photoRefs:point.photoRefs||[]};
+  state.tab='neu'; saveState(); render();
+}
+function deletePoint(id){
+  var inspection=selectedInspection(); if(!inspection)return;
+  var point=inspection.points.find(function(p){return p.id===id});
+  var refs=collectPhotoRefsFromPoint(point);
+  update(function(){inspection.points=inspection.points.filter(function(p){return p.id!==id});if(state.editingPointId===id)resetPointForm(false)});
+  deletePhotoRefs(refs);
+}
+function groupedPoints(){var inspection=selectedInspection(),map=new Map();(inspection?inspection.points:[]).forEach(function(point){var key=(point.component||'').trim()||'Ohne Bauteil';if(!map.has(key))map.set(key,[]);map.get(key).push(point)});return Array.from(map.entries())}function countComponents(inspection){var set=new Set();(inspection&&inspection.points?inspection.points:[]).forEach(function(point){set.add(((point.component||'').trim()||'Ohne Bauteil'))});return set.size}
 function tabButton(value,label){return '<button class="tab-btn '+(state.tab===value?'active':'')+'" data-tab="'+value+'">'+label+'</button>'}
 function bottomTab(value,label){return '<button class="bottom-tab '+(state.tab===value?'active':'')+'" data-tab="'+value+'">'+label+'</button>'}
 function projectsView(){return '<div class="stack-md"><div class="search-wrap"><span class="search-icon">⌕</span><input class="input" placeholder="Projekt oder Bauwerk suchen" value="'+escapeAttr(state.search)+'" data-field="search"></div><div class="grid-2"><button class="btn '+(state.favoritesOnly?'':'btn-outline')+'" data-action="toggle-favorites">Nur Favoriten</button><button class="btn" data-action="open-project-dialog">Neues Projekt</button></div><div class="scroll stack-sm">'+filteredProjects().map(function(project){return '<div class="card click-card '+(state.selectedProjectId===project.id?'selected':'')+'" data-select-project="'+project.id+'"><div class="card-content row between"><div class="grow"><div><strong>'+escapeHtml(project.name)+'</strong></div><div class="muted">'+escapeHtml(project.location||'–')+'</div><div class="fine">'+project.structures.length+' Bauwerke</div></div><div class="actions"><button class="icon-btn" data-fav="'+project.id+'" aria-label="Favorit umschalten">'+iconSvg('star',{filled:project.favorite})+'</button><button class="icon-btn" data-edit-project="'+project.id+'" aria-label="Projekt bearbeiten">'+iconSvg('pencil')+'</button><button class="icon-btn" data-delete-project="'+project.id+'" aria-label="Projekt löschen">'+iconSvg('trash')+'</button></div></div></div>'}).join('')+'</div></div>'}
-function structuresView(project){var structures=project?project.structures:[];return '<div class="stack-md"><div class="row between"><div class="grow"><div class="muted">Projekt</div><div class="box"><strong>'+escapeHtml(project?project.name:'')+'</strong></div></div><button class="btn" data-action="open-structure-dialog">Bauwerk</button></div>'+(structures.length?structures.map(function(structure){return '<div class="card '+(state.selectedStructureId===structure.id?'selected':'')+'"><div class="card-content row between"><button class="plain-btn grow" data-select-structure="'+structure.id+'"><strong>'+escapeHtml(structure.name)+'</strong></button><div class="actions"><button class="icon-btn" data-edit-structure="'+structure.id+'" aria-label="Bauwerk bearbeiten">'+iconSvg('pencil')+'</button><button class="icon-btn" data-delete-structure="'+structure.id+'" aria-label="Bauwerk löschen">'+iconSvg('trash')+'</button></div></div></div>'}).join(''):'<div class="empty">Noch keine Bauwerke vorhanden.</div>')+'</div>'}
-function inspectionsView(structure){var inspections=structure?structure.inspections:[];return '<div class="stack-md"><div class="row between"><div><div class="muted">Bauwerk</div><div><strong>'+escapeHtml(structure?structure.name:'')+'</strong></div></div><button class="btn" data-action="create-inspection" '+(!structure?'disabled':'')+'>Neue Kontrolle</button></div><div class="stack-sm">'+inspections.map(function(inspection){return '<div class="card '+(state.selectedInspectionId===inspection.id?'selected':'')+'"><div class="card-content row between"><button class="plain-btn grow" data-select-inspection="'+inspection.id+'"><div><strong>Kontrolle '+formatDate(inspection.date)+'</strong></div><div class="muted">'+inspection.points.length+' Prüfpunkte</div></button><button class="btn btn-ghost btn-icon" data-delete-inspection="'+inspection.id+'" aria-label="Kontrolle löschen">'+iconSvg('trash')+'</button></div></div>'}).join('')+'</div><button class="btn btn-outline" data-tab="neu" '+(!selectedInspection()?'disabled':'')+'>Neuer Prüfpunkt</button></div>'}
-function pointFormView(){return '<div class="stack-md"><div class="row between muted"><div>'+(state.editingPointId?'Prüfpunkt bearbeiten':'Eingabemaske für neuen Prüfpunkt')+'</div>'+(state.editingPointId?'<button class="btn btn-ghost btn-sm" data-action="cancel-edit">Abbrechen</button>':'')+'</div><div class="stack-sm"><label class="label">Bauteil *</label><input class="input" value="'+escapeAttr(state.form.component)+'" placeholder="z. B. Fundament F5" data-form="component"><div class="chip-wrap">'+componentSuggestions().map(function(x){return '<button class="chip" data-chip-component="'+escapeAttr(x)+'">'+escapeHtml(x)+'</button>'}).join('')+'</div></div><div class="stack-sm"><label class="label">Prüfaspekt</label><input class="input" value="'+escapeAttr(state.form.aspect)+'" placeholder="optional" data-form="aspect"><div class="chip-wrap">'+aspectSuggestions().map(function(x){return '<button class="chip" data-chip-aspect="'+escapeAttr(x)+'">'+escapeHtml(x)+'</button>'}).join('')+'</div></div><div class="stack-sm"><label class="label">Status *</label><div class="status-grid">'+['OK','Hinweis','Mangel'].map(function(status){return '<button class="status-btn '+(state.form.status===status?'active':'')+'" data-status="'+status+'">'+status+'</button>'}).join('')+'</div></div><div class="stack-sm"><label class="label">Anmerkung</label><textarea class="textarea" placeholder="optional, auch per Spracheingabe denkbar" data-form="note">'+escapeHtml(state.form.note)+'</textarea><div class="row wrap"><button class="btn btn-outline" type="button" disabled>Spracheingabe</button><label class="btn '+(state.form.photoAttached?'':'btn-outline')+'"><input type="file" accept="image/*" capture="environment" multiple class="hidden" id="photo-input">'+(state.form.photoAttached?String(state.form.photoCount||1)+' Foto'+((state.form.photoCount||1)>1?'s':'')+' angehängt':'Foto aufnehmen')+'</label></div><div class="fine">Mehrere Fotos: Button erneut tippen und weiteres Foto aufnehmen.</div>'+(state.form.photoAttached&&state.form.photoNames.length?'<div class="fine">'+escapeHtml(state.form.photoNames.join(', '))+'</div>':'')+(state.form.photoCount?'<div class="photo-strip" data-form-photo-strip="1"></div>':'')+'</div><div class="grid-3"><button class="btn" data-save="close">'+(state.editingPointId?'Änderung speichern':'Speichern')+'</button><button class="btn btn-outline" data-save="keep">'+(state.editingPointId?'Speichern + weiter':'Speichern + nächster')+'</button><button class="btn btn-outline" data-save="new">Speichern + nächstes Bauteil</button></div></div>'}
+function structuresView(project){var structures=project?project.structures:[];return '<div class="stack-md"><div class="row between"><div class="grow"><div class="muted">Projekt</div><div class="box"><strong>'+escapeHtml(project?project.name:'')+'</strong></div></div><button class="btn" data-action="open-structure-dialog">Bauwerk</button></div>'+(structures.length?structures.map(function(structure){return '<div class="card '+(state.selectedStructureId===structure.id?'selected':'')+'"><div class="card-content row between"><button class="plain-btn grow" data-select-structure="'+structure.id+'"><span class="structure-name">'+escapeHtml(structure.name)+'</span></button><div class="actions"><button class="icon-btn" data-edit-structure="'+structure.id+'" aria-label="Bauwerk bearbeiten">'+iconSvg('pencil')+'</button><button class="icon-btn" data-delete-structure="'+structure.id+'" aria-label="Bauwerk löschen">'+iconSvg('trash')+'</button></div></div></div>'}).join(''):'<div class="empty">Noch keine Bauwerke vorhanden.</div>')+'</div>'}
+function inspectionsView(structure){var inspections=structure?structure.inspections:[];return '<div class="stack-md"><div class="row between"><div><div class="muted">Bauwerk</div><div><strong>'+escapeHtml(structure?structure.name:'')+'</strong></div></div><button class="btn" data-action="create-inspection" '+(!structure?'disabled':'')+'>Neue Kontrolle</button></div><div class="stack-sm">'+inspections.map(function(inspection){var componentCount=countComponents(inspection);return '<div class="card '+(state.selectedInspectionId===inspection.id?'selected':'')+'"><div class="card-content row between"><button class="plain-btn grow" data-select-inspection="'+inspection.id+'"><div><strong>Kontrolle '+formatDate(inspection.date)+'</strong></div><div class="inspection-meta">'+inspection.points.length+' Prüfpunkte · '+componentCount+' Bauteile</div></button><button class="btn btn-ghost btn-icon" data-delete-inspection="'+inspection.id+'" aria-label="Kontrolle löschen">'+iconSvg('trash')+'</button></div></div>'}).join('')+'</div><button class="btn btn-outline" data-tab="neu" '+(!selectedInspection()?'disabled':'')+'>Neuer Prüfpunkt</button></div>'}
+
+function pointFormView(){
+  var photoInfo=(state.form.photoAttached&&state.form.photoNames.length)?'<div class="fine">'+escapeHtml(state.form.photoNames.join(', '))+'</div>':'';
+  var previews=photoStripHtml(state.form.photoRefs,pendingPhotoUrls);
+  var replaceNote=(state.form.photoRefs&&state.form.photoRefs.length&&pendingPhotoFiles.length)?'<div class="fine">Die neue Auswahl ersetzt die bisher gespeicherten Fotos.</div>':'';
+  return '<div class="stack-md"><div class="row between muted"><div>'+(state.editingPointId?'Prüfpunkt bearbeiten':'Eingabemaske für neuen Prüfpunkt')+'</div>'+(state.editingPointId?'<button class="btn btn-ghost btn-sm" data-action="cancel-edit">Abbrechen</button>':'')+'</div><div class="stack-sm"><label class="label">Bauteil *</label><input class="input" value="'+escapeAttr(state.form.component)+'" placeholder="z. B. Fundament F5" data-form="component"><div class="chip-wrap">'+componentSuggestions().map(function(x){return '<button class="chip" data-chip-component="'+escapeAttr(x)+'">'+escapeHtml(x)+'</button>'}).join('')+'</div></div><div class="stack-sm"><label class="label">Prüfaspekt</label><input class="input" value="'+escapeAttr(state.form.aspect)+'" placeholder="optional" data-form="aspect"><div class="chip-wrap">'+aspectSuggestions().map(function(x){return '<button class="chip" data-chip-aspect="'+escapeAttr(x)+'">'+escapeHtml(x)+'</button>'}).join('')+'</div></div><div class="stack-sm"><label class="label">Status *</label><div class="status-grid">'+['OK','Hinweis','Mangel'].map(function(status){return '<button class="status-btn '+(state.form.status===status?'active':'')+'" data-status="'+status+'">'+status+'</button>'}).join('')+'</div></div><div class="stack-sm"><label class="label">Anmerkung</label><textarea class="textarea" placeholder="optional, auch per Spracheingabe denkbar" data-form="note">'+escapeHtml(state.form.note)+'</textarea><div class="row wrap"><button class="btn btn-outline" type="button" disabled>Spracheingabe</button><label class="btn '+(state.form.photoAttached?'':'btn-outline')+'"><input type="file" accept="image/*" capture="environment" multiple class="hidden" id="photo-input">'+(state.form.photoAttached?String(state.form.photoCount||1)+' Foto'+((state.form.photoCount||1)>1?'s':'')+' ausgewählt':'Foto aufnehmen')+'</label></div>'+photoInfo+replaceNote+previews+'</div><div class="grid-3"><button class="btn" data-save="close">'+(state.editingPointId?'Änderung speichern':'Speichern')+'</button><button class="btn btn-outline" data-save="keep">'+(state.editingPointId?'Speichern + weiter':'Speichern + nächster')+'</button><button class="btn btn-outline" data-save="new">Speichern + nächstes Bauteil</button></div></div>'
+}
 function statusClass(status){return status==='OK'?'status-ok':status==='Hinweis'?'status-hinweis':'status-mangel'}
-function pointsView(inspection){if(!inspection)return '<div class="empty centered">Bitte zuerst eine Kontrolle anlegen oder auswählen.</div>';if(!inspection.points.length)return '<div class="empty centered">Noch keine Prüfpunkte erfasst.</div>';return inspection.points.map(function(point){return '<div class="card '+statusClass(point.status)+'"><div class="card-content stack-sm"><div class="row between wrap"><div><div><strong>'+escapeHtml(point.component)+'</strong></div>'+(point.aspect?'<div class="muted">'+escapeHtml(point.aspect)+'</div>':'')+'</div><span class="badge '+statusClass(point.status)+'">'+escapeHtml(point.status)+'</span></div>'+(point.note?'<div>'+escapeHtml(point.note)+'</div>':'')+((point.photoRefs&&point.photoRefs.length)?'<div class="photo-strip" data-photo-strip="'+point.id+'"></div>':'')+'<div class="row between wrap fine"><div class="row wrap"><span>'+escapeHtml(point.createdAt||'')+'</span><span>'+(point.photos?String(point.photos)+' Foto':'kein Foto')+'</span></div><div class="actions"><button class="btn btn-ghost btn-icon" data-edit-point="'+point.id+'" aria-label="Prüfpunkt bearbeiten">'+iconSvg('pencil')+'</button><button class="btn btn-ghost btn-icon" data-delete-point="'+point.id+'" aria-label="Prüfpunkt löschen">'+iconSvg('trash')+'</button></div></div></div></div>'}).join('')}
+
+function pointsView(inspection){
+  if(!inspection)return '<div class="empty centered">Bitte zuerst eine Kontrolle anlegen oder auswählen.</div>';
+  if(!inspection.points.length)return '<div class="empty centered">Noch keine Prüfpunkte erfasst.</div>';
+  return inspection.points.map(function(point){
+    var refs=point.photoRefs||[];
+    var thumbs=refs.length?photoStripHtml(refs,[]):'';
+    return '<div class="card '+statusClass(point.status)+'"><div class="card-content stack-sm"><div class="row between wrap"><div><div><strong>'+escapeHtml(point.component)+'</strong></div>'+(point.aspect?'<div class="muted">'+escapeHtml(point.aspect)+'</div>':'')+'</div><span class="badge '+statusClass(point.status)+'">'+escapeHtml(point.status)+'</span></div>'+(point.note?'<div>'+escapeHtml(point.note)+'</div>':'')+thumbs+'<div class="row between wrap fine"><div class="row wrap"><span>'+escapeHtml(point.createdAt||'')+'</span><span>'+(point.photos?String(point.photos)+' Foto'+(point.photos>1?'s':''):'kein Foto')+'</span></div><div class="actions"><button class="btn btn-ghost btn-icon" data-edit-point="'+point.id+'" aria-label="Prüfpunkt bearbeiten">'+iconSvg('pencil')+'</button><button class="btn btn-ghost btn-icon" data-delete-point="'+point.id+'" aria-label="Prüfpunkt löschen">'+iconSvg('trash')+'</button></div></div></div></div>';
+  }).join('');
+}
 function exportView(project,structure,inspection){if(!inspection)return '<div class="card"><div class="card-content empty">Bitte zuerst eine Kontrolle auswählen oder anlegen.</div></div>';return '<div class="card"><div class="card-header"><div class="card-title">Exportvorschau</div></div><div class="card-content stack-lg"><div class="stack-sm"><div><strong>Projekt:</strong> '+escapeHtml(project?project.name:'')+'</div><div><strong>Bauwerk:</strong> '+escapeHtml(structure?structure.name:'')+'</div><div><strong>Datum:</strong> '+formatDate(inspection.date)+'</div><div><strong>Prüfer:</strong> '+escapeHtml(inspection.inspector||'Michel')+'</div></div><hr style="border:none;border-top:1px solid var(--border);width:100%;margin:0;"><div class="stack-lg">'+groupedPoints().map(function(entry){var component=entry[0],points=entry[1];return '<div class="stack-sm"><div><strong>Bauteil: '+escapeHtml(component)+'</strong></div><div class="stack-sm" style="padding-left:16px;">'+points.map(function(point){return '<div>'+(point.aspect?'<div><strong>'+escapeHtml(point.aspect)+' – '+escapeHtml(point.status)+'</strong></div>':'<div><strong>'+escapeHtml(point.status)+'</strong></div>')+(point.note?'<div>'+escapeHtml(point.note)+'</div>':'')+'</div>'}).join('')+'</div></div>'}).join('')+'</div></div></div>'}
 function projectDialog(){return '<div class="dialog-backdrop" data-close-dialog="project"><div class="dialog" onclick="event.stopPropagation()"><div class="row between"><div class="card-title">'+(state.projectForm.id?'Projekt bearbeiten':'Neues Projekt anlegen')+'</div><button class="btn btn-ghost btn-icon" data-close-dialog="project">×</button></div><div class="stack-md" style="margin-top:12px;"><div><label class="label">Projektname *</label><input class="input" value="'+escapeAttr(state.projectForm.name)+'" data-project-form="name"></div><div><label class="label">Ort</label><input class="input" value="'+escapeAttr(state.projectForm.location)+'" data-project-form="location"></div>'+(!state.projectForm.id?'<div><label class="label">Erstes Bauwerk</label><input class="input" value="'+escapeAttr(state.projectForm.firstStructure)+'" data-project-form="firstStructure"></div>':'')+'<div class="grid-2"><button class="btn" data-action="create-project" '+(!state.projectForm.name.trim()?'disabled':'')+'>'+(state.projectForm.id?'Speichern':'Anlegen')+'</button><button class="btn btn-outline" data-close-dialog="project">Abbrechen</button></div></div></div></div>'}
-function photoModalView(){var item=activePhotoModal&&activePhotoModal.items?activePhotoModal.items[activePhotoModal.index]:null;var total=activePhotoModal&&activePhotoModal.items?activePhotoModal.items.length:0;return '<div class="photo-modal" data-close-photo-modal="1"><div class="photo-modal-box" onclick="event.stopPropagation()"><div class="photo-modal-head"><div>'+escapeHtml(item&&item.name?item.name:'Foto')+'</div><button class="btn btn-ghost btn-icon" data-close-photo-modal="1">×</button></div><div class="photo-modal-stage" data-photo-swipe="1">'+(total>1?'<button class="photo-nav prev" type="button" data-photo-nav="prev" aria-label="Vorheriges Foto">‹</button>':'')+'<img src="'+escapeAttr(item&&item.url?item.url:'')+'" alt="Foto">'+(total>1?'<button class="photo-nav next" type="button" data-photo-nav="next" aria-label="Nächstes Foto">›</button>':'')+'</div><div class="photo-modal-meta">'+(total>1?(String(activePhotoModal.index+1)+' / '+String(total)+' · wischen möglich'):'1 / 1')+'</div></div></div>'}
 function structureDialog(){return '<div class="dialog-backdrop" data-close-dialog="structure"><div class="dialog" onclick="event.stopPropagation()"><div class="row between"><div class="card-title">'+(state.structureForm.id?'Bauwerk bearbeiten':'Neues Bauwerk anlegen')+'</div><button class="btn btn-ghost btn-icon" data-close-dialog="structure">×</button></div><div class="stack-md" style="margin-top:12px;"><div><label class="label">Bauwerk *</label><input class="input" value="'+escapeAttr(state.structureForm.name)+'" data-structure-form="name"></div><div class="grid-2"><button class="btn" data-action="create-structure" '+(!state.structureForm.name.trim()?'disabled':'')+'>'+(state.structureForm.id?'Speichern':'Anlegen')+'</button><button class="btn btn-outline" data-close-dialog="structure">Abbrechen</button></div></div></div></div>'}
 function escapeHtml(str){return String(str==null?'':str).replace(/[&<>"']/g,function(s){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]})}
 function escapeAttr(str){return escapeHtml(str).replace(/`/g,'&#96;')}
 function captureFocus(){var el=document.activeElement;if(!el)return null;var tag=(el.tagName||'').toLowerCase();if(tag!=='input'&&tag!=='textarea')return null;var key=el.dataset.field?'field:'+el.dataset.field:el.dataset.form?'form:'+el.dataset.form:el.dataset.projectForm?'projectForm:'+el.dataset.projectForm:el.dataset.structureForm?'structureForm:'+el.dataset.structureForm:null;if(!key)return null;return {key:key,start:typeof el.selectionStart==='number'?el.selectionStart:null,end:typeof el.selectionEnd==='number'?el.selectionEnd:null}}
 function restoreFocus(){if(!pendingFocus)return;var selector=null;if(pendingFocus.key.indexOf('field:')===0)selector='[data-field="'+pendingFocus.key.slice(6)+'"]';if(pendingFocus.key.indexOf('form:')===0)selector='[data-form="'+pendingFocus.key.slice(5)+'"]';if(pendingFocus.key.indexOf('projectForm:')===0)selector='[data-project-form="'+pendingFocus.key.slice(12)+'"]';if(pendingFocus.key.indexOf('structureForm:')===0)selector='[data-structure-form="'+pendingFocus.key.slice(14)+'"]';if(!selector){pendingFocus=null;return}var el=document.querySelector(selector);if(el){el.focus();if(typeof pendingFocus.start==='number'&&typeof el.setSelectionRange==='function'){el.setSelectionRange(pendingFocus.start,pendingFocus.end!=null?pendingFocus.end:pendingFocus.start)}}pendingFocus=null}
 
-function hydratePhotoStrips(){
-  document.querySelectorAll('[data-photo-strip]').forEach(function(el){
-    var inspection=selectedInspection(); if(!inspection) return;
-    var point=inspection.points.find(function(p){return p.id===el.dataset.photoStrip}); if(!point||!point.photoRefs||!point.photoRefs.length) return;
-    el.innerHTML='<div class="photo-thumb placeholder">lädt...</div>';
-    Promise.all(point.photoRefs.map(function(ref){return getPhotoBlob(ref.id).then(function(blob){return blob?{url:URL.createObjectURL(blob),name:ref.name||'Foto'}:null}).catch(function(){return null})})).then(function(items){
-      items=items.filter(Boolean);
-      el.innerHTML='';
-      items.forEach(function(item, idx){
-        var btn=document.createElement('button'); btn.className='photo-thumb'; btn.type='button';
-        btn.innerHTML='<img alt="'+escapeAttr(item.name)+'" src="'+item.url+'">';
-        btn.onclick=function(){openPhotoGallery(items, idx);};
-        el.appendChild(btn);
-      });
-    });
-  });
-  document.querySelectorAll('[data-form-photo-strip]').forEach(function(el){
-    el.innerHTML='';
-    var existing=(state.form.photoRefs||[]).map(function(ref){return {id:ref.id,name:ref.name||'Foto'};});
-    var pending=pendingPhotoFiles.map(function(file, idx){return {idx:idx,name:file.name||'Foto',url:URL.createObjectURL(file)};});
-    if(!existing.length && !pending.length) return;
-    Promise.all(existing.map(function(item){return getPhotoBlob(item.id).then(function(blob){return blob?{url:URL.createObjectURL(blob),name:item.name}:null}).catch(function(){return null})})).then(function(storedItems){
-      storedItems=storedItems.filter(Boolean);
-      var galleryItems=storedItems.concat(pending);
-      storedItems.forEach(function(item, idx){
-        var btn=document.createElement('button'); btn.className='photo-thumb'; btn.type='button';
-        btn.innerHTML='<img alt="'+escapeAttr(item.name)+'" src="'+item.url+'">';
-        btn.onclick=function(){openPhotoGallery(galleryItems, idx);};
-        el.appendChild(btn);
-      });
-      pending.forEach(function(item, pendingIdx){
-        var btn=document.createElement('button'); btn.className='photo-thumb'; btn.type='button';
-        btn.innerHTML='<img alt="'+escapeAttr(item.name)+'" src="'+item.url+'">';
-        btn.onclick=function(){openPhotoGallery(galleryItems, storedItems.length + pendingIdx);};
-        el.appendChild(btn);
-      });
-    });
-  });
+function bindEvents(){
+  document.querySelectorAll('[data-tab]').forEach(function(el){el.onclick=function(){update(function(){state.tab=el.dataset.tab})}});
+  var actionMap={
+    'toggle-nav':function(){update(function(){state.isMobileNavOpen=!state.isMobileNavOpen})},
+    'toggle-favorites':function(){update(function(){state.favoritesOnly=!state.favoritesOnly})},
+    'open-project-dialog':function(){openProjectDialog(null)},
+    'open-structure-dialog':function(){openStructureDialog(null)},
+    'create-inspection':function(){createInspection()},
+    'cancel-edit':function(){update(function(){resetPointForm(false)})},
+    'create-project':function(){createProject()},
+    'create-structure':function(){createStructure()}
+  };
+  document.querySelectorAll('[data-action]').forEach(function(el){el.onclick=function(){var fn=actionMap[el.dataset.action];if(fn)fn()}});
+  document.querySelectorAll('[data-select-project]').forEach(function(el){el.onclick=function(){var project=state.projects.find(function(p){return p.id===el.dataset.selectProject});if(project)selectProjectAction(project)}});
+  document.querySelectorAll('[data-select-structure]').forEach(function(el){el.onclick=function(){var p=selectedProject();if(!p)return;var s=p.structures.find(function(x){return x.id===el.dataset.selectStructure});if(s)selectStructureAction(s)}});
+  document.querySelectorAll('[data-edit-structure]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var p=selectedProject();if(!p)return;var s=p.structures.find(function(x){return x.id===el.dataset.editStructure});if(s)openStructureDialog(s)}});
+  document.querySelectorAll('[data-delete-structure]').forEach(function(el){el.onclick=function(e){e.stopPropagation();deleteStructure(el.dataset.deleteStructure)}});
+  document.querySelectorAll('[data-select-inspection]').forEach(function(el){el.onclick=function(){update(function(){state.selectedInspectionId=el.dataset.selectInspection})}});
+  document.querySelectorAll('[data-delete-inspection]').forEach(function(el){el.onclick=function(){deleteInspection(el.dataset.deleteInspection)}});
+  document.querySelectorAll('[data-delete-project]').forEach(function(el){el.onclick=function(e){e.stopPropagation();deleteProject(el.dataset.deleteProject)}});
+  document.querySelectorAll('[data-fav]').forEach(function(el){el.onclick=function(e){e.stopPropagation();toggleFavorite(el.dataset.fav)}});
+  document.querySelectorAll('[data-edit-project]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var p=state.projects.find(function(x){return x.id===el.dataset.editProject});if(p)openProjectDialog(p)}});
+  document.querySelectorAll('[data-chip-component]').forEach(function(el){el.onclick=function(){update(function(){state.form.component=el.dataset.chipComponent})}});
+  document.querySelectorAll('[data-chip-aspect]').forEach(function(el){el.onclick=function(){update(function(){state.form.aspect=el.dataset.chipAspect})}});
+  document.querySelectorAll('[data-status]').forEach(function(el){el.onclick=function(){update(function(){state.form.status=el.dataset.status})}});
+  document.querySelectorAll('[data-edit-point]').forEach(function(el){el.onclick=function(){editPoint(el.dataset.editPoint)}});
+  document.querySelectorAll('[data-delete-point]').forEach(function(el){el.onclick=function(){deletePoint(el.dataset.deletePoint)}});
+  document.querySelectorAll('[data-open-photo]').forEach(function(el){el.onclick=function(){openPhotoViewer(el.dataset.openPhoto,'Foto')}});
+  document.querySelectorAll('[data-close-photo-viewer]').forEach(function(el){el.onclick=function(){closePhotoViewer()}});
+  document.querySelectorAll('[data-save]').forEach(function(el){el.onclick=function(){savePoint(el.dataset.save==='close'?{closeAfter:true}:el.dataset.save==='keep'?{keepComponent:true}:{})}});
+  document.querySelectorAll('[data-close-dialog]').forEach(function(el){el.onclick=function(){update(function(){state.dialogs[el.dataset.closeDialog]=false})}});
+  document.querySelectorAll('[data-field="search"]').forEach(function(el){el.oninput=function(){state.search=el.value;saveState()};el.onblur=function(){render()};el.onchange=function(){render()}});
+  document.querySelectorAll('[data-form]').forEach(function(el){el.oninput=function(){state.form[el.dataset.form]=el.value;saveState()};el.onblur=function(){render()};el.onchange=function(){render()}});
+  document.querySelectorAll('[data-project-form]').forEach(function(el){el.oninput=function(){state.projectForm[el.dataset.projectForm]=el.value;saveState()};el.onblur=function(){render()};el.onchange=function(){render()}});
+  document.querySelectorAll('[data-structure-form]').forEach(function(el){el.oninput=function(){state.structureForm[el.dataset.structureForm]=el.value;saveState()};el.onblur=function(){render()};el.onchange=function(){render()}});
+  var photoInput=document.getElementById('photo-input');
+  if(photoInput){photoInput.onchange=function(){
+    pendingPhotoFiles=Array.from(photoInput.files||[]);
+    createPendingPhotoUrls(pendingPhotoFiles);
+    state.form.photoAttached=pendingPhotoFiles.length>0 || (state.form.photoRefs&&state.form.photoRefs.length>0);
+    state.form.photoCount=pendingPhotoFiles.length>0?pendingPhotoFiles.length:(state.form.photoRefs||[]).length;
+    state.form.photoNames=pendingPhotoFiles.length>0?pendingPhotoFiles.map(function(f){return f.name||'Foto'}):(state.form.photoRefs||[]).map(function(ref){return ref.name||'Foto'});
+    saveState();
+    render();
+  }}
 }
 
-function bindEvents(){document.querySelectorAll('[data-tab]').forEach(function(el){el.onclick=function(){update(function(){state.tab=el.dataset.tab})}});var actionMap={'toggle-nav':function(){update(function(){state.isMobileNavOpen=!state.isMobileNavOpen})},'toggle-favorites':function(){update(function(){state.favoritesOnly=!state.favoritesOnly})},'open-project-dialog':function(){openProjectDialog(null)},'open-structure-dialog':function(){openStructureDialog(null)},'create-inspection':function(){createInspection()},'cancel-edit':function(){update(function(){resetPointForm(false)})},'create-project':function(){createProject()},'create-structure':function(){createStructure()}};document.querySelectorAll('[data-action]').forEach(function(el){el.onclick=function(){var fn=actionMap[el.dataset.action];if(fn)fn()}});document.querySelectorAll('[data-select-project]').forEach(function(el){el.onclick=function(){var project=state.projects.find(function(p){return p.id===el.dataset.selectProject});if(project)selectProjectAction(project)}});document.querySelectorAll('[data-select-structure]').forEach(function(el){el.onclick=function(){var p=selectedProject();if(!p)return;var s=p.structures.find(function(x){return x.id===el.dataset.selectStructure});if(s)selectStructureAction(s)}});document.querySelectorAll('[data-edit-structure]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var p=selectedProject();if(!p)return;var s=p.structures.find(function(x){return x.id===el.dataset.editStructure});if(s)openStructureDialog(s)}});document.querySelectorAll('[data-delete-structure]').forEach(function(el){el.onclick=function(e){e.stopPropagation();deleteStructure(el.dataset.deleteStructure)}});document.querySelectorAll('[data-select-inspection]').forEach(function(el){el.onclick=function(){update(function(){state.selectedInspectionId=el.dataset.selectInspection})}});document.querySelectorAll('[data-delete-inspection]').forEach(function(el){el.onclick=function(){deleteInspection(el.dataset.deleteInspection)}});document.querySelectorAll('[data-delete-project]').forEach(function(el){el.onclick=function(e){e.stopPropagation();deleteProject(el.dataset.deleteProject)}});document.querySelectorAll('[data-fav]').forEach(function(el){el.onclick=function(e){e.stopPropagation();toggleFavorite(el.dataset.fav)}});document.querySelectorAll('[data-edit-project]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var p=state.projects.find(function(x){return x.id===el.dataset.editProject});if(p)openProjectDialog(p)}});document.querySelectorAll('[data-chip-component]').forEach(function(el){el.onclick=function(){update(function(){state.form.component=el.dataset.chipComponent})}});document.querySelectorAll('[data-chip-aspect]').forEach(function(el){el.onclick=function(){update(function(){state.form.aspect=el.dataset.chipAspect})}});document.querySelectorAll('[data-status]').forEach(function(el){el.onclick=function(){update(function(){state.form.status=el.dataset.status})}});document.querySelectorAll('[data-edit-point]').forEach(function(el){el.onclick=function(){editPoint(el.dataset.editPoint)}});document.querySelectorAll('[data-delete-point]').forEach(function(el){el.onclick=function(){deletePoint(el.dataset.deletePoint)}});document.querySelectorAll('[data-save]').forEach(function(el){el.onclick=function(){savePoint(el.dataset.save==='close'?{closeAfter:true}:el.dataset.save==='keep'?{keepComponent:true}:{})}});document.querySelectorAll('[data-close-dialog]').forEach(function(el){el.onclick=function(){update(function(){state.dialogs[el.dataset.closeDialog]=false})}});document.querySelectorAll('[data-field="search"]').forEach(function(el){el.oninput=function(){pendingFocus=captureFocus();update(function(){state.search=el.value})}});document.querySelectorAll('[data-form]').forEach(function(el){el.oninput=function(){pendingFocus=captureFocus();update(function(){state.form[el.dataset.form]=el.value})}});document.querySelectorAll('[data-project-form]').forEach(function(el){el.oninput=function(){pendingFocus=captureFocus();state.projectForm[el.dataset.projectForm]=el.value;render()}});document.querySelectorAll('[data-structure-form]').forEach(function(el){el.oninput=function(){pendingFocus=captureFocus();state.structureForm[el.dataset.structureForm]=el.value;render()}});document.querySelectorAll('[data-close-photo-modal]').forEach(function(el){el.onclick=function(){activePhotoModal=null;render()}});document.querySelectorAll('[data-photo-nav]').forEach(function(el){el.onclick=function(e){e.stopPropagation();changeActivePhoto(el.dataset.photoNav==='next'?1:-1)}});var swipeEl=document.querySelector('[data-photo-swipe="1"]');if(swipeEl){swipeEl.addEventListener('touchstart',function(e){if(e.touches&&e.touches[0])photoSwipeStartX=e.touches[0].clientX},{passive:true});swipeEl.addEventListener('touchend',function(e){if(photoSwipeStartX==null)return;var endX=e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientX:photoSwipeStartX;var delta=endX-photoSwipeStartX;photoSwipeStartX=null;if(Math.abs(delta)>40){changeActivePhoto(delta<0?1:-1)}});}var photoInput=document.getElementById('photo-input');if(photoInput){photoInput.onchange=function(){update(function(){var files=Array.from(photoInput.files||[]);pendingPhotoFiles=pendingPhotoFiles.concat(files);var existingRefs=state.form.photoRefs||[];state.form.photoAttached=(existingRefs.length+pendingPhotoFiles.length)>0;state.form.photoCount=existingRefs.length+pendingPhotoFiles.length;state.form.photoNames=existingRefs.map(function(ref){return ref.name||'Foto'}).concat(pendingPhotoFiles.map(function(f){return f.name||'Foto'}))});photoInput.value='';}}}
-function render(){ensureSelection();var app=document.getElementById('app'),project=selectedProject(),structure=selectedStructure(),inspection=selectedInspection();app.innerHTML='<div class="app"><div class="topbar"><div><h1 class="title">Baustellenkontrolle</h1><p class="subtitle">Prototyp für die mobile Erfassung statisch-konstruktiver Kontrollen</p></div><div class="row wrap"><span class="badge">'+escapeHtml(project?project.name:'')+'</span><span class="badge">'+escapeHtml(structure?structure.name:'')+'</span><button class="btn btn-outline mobile-inline" data-action="toggle-nav">'+(state.isMobileNavOpen?'Navigation schließen':'Navigation öffnen')+'</button></div></div><div class="layout"><div class="card '+(!state.isMobileNavOpen?'mobile-only hidden':'')+'"><div class="card-header"><div class="card-title">Navigation</div></div><div class="card-content stack-md"><div class="tabs desktop-only">'+tabButton('projekte','Projekte')+tabButton('bauwerke','Bauwerke')+tabButton('kontrollen','Kontrollen')+'</div>'+(state.tab==='projekte'?projectsView():'')+(state.tab==='bauwerke'?structuresView(project):'')+(state.tab==='kontrollen'?inspectionsView(structure):'')+(state.tab==='neu'?pointFormView():'')+'</div></div><div class="stack-lg"><div class="content-grid"><div class="card"><div class="card-header"><div class="card-title">Kontrolle '+(inspection?formatDate(inspection.date):'–')+'</div></div><div class="card-content"><div class="scroll large stack-sm">'+pointsView(inspection)+'</div></div></div>'+(state.tab==='kontrollen'?exportView(project,structure,inspection):'')+'</div></div></div></div><div class="bottom-nav mobile-only"><div class="bottom-nav-grid">'+bottomTab('projekte','Projekte')+bottomTab('bauwerke','Bauwerke')+bottomTab('kontrollen','Kontrollen')+'</div></div>'+(state.dialogs.project?projectDialog():'')+(state.dialogs.structure?structureDialog():'')+(activePhotoModal?photoModalView():'');bindEvents();restoreFocus();hydratePhotoStrips()}
+function render(){
+  ensureSelection();
+  var app=document.getElementById('app'),project=selectedProject(),structure=selectedStructure(),inspection=selectedInspection();
+  app.innerHTML='<div class="app"><div class="topbar"><div><h1 class="title">Baustellenkontrolle</h1><p class="subtitle">Prototyp für die mobile Erfassung statisch-konstruktiver Kontrollen</p></div><div class="row wrap"><span class="badge">'+escapeHtml(project?project.name:'')+'</span><span class="badge">'+escapeHtml(structure?structure.name:'')+'</span><button class="btn btn-outline mobile-inline" data-action="toggle-nav">'+(state.isMobileNavOpen?'Navigation schließen':'Navigation öffnen')+'</button></div></div><div class="layout"><div class="card '+(!state.isMobileNavOpen?'mobile-only hidden':'')+'"><div class="card-header"><div class="card-title">Navigation</div></div><div class="card-content stack-md"><div class="tabs desktop-only">'+tabButton('projekte','Projekte')+tabButton('bauwerke','Bauwerke')+tabButton('kontrollen','Kontrollen')+'</div>'+(state.tab==='projekte'?projectsView():'')+(state.tab==='bauwerke'?structuresView(project):'')+(state.tab==='kontrollen'?inspectionsView(structure):'')+(state.tab==='neu'?pointFormView():'')+'</div></div><div class="stack-lg"><div class="content-grid"><div class="card"><div class="card-header"><div class="card-title">Kontrolle '+(inspection?formatDate(inspection.date):'–')+'</div></div><div class="card-content"><div class="scroll large stack-sm">'+pointsView(inspection)+'</div></div></div>'+(state.tab==='kontrollen'?exportView(project,structure,inspection):'')+'</div></div></div></div><div class="bottom-nav mobile-only"><div class="bottom-nav-grid">'+bottomTab('projekte','Projekte')+bottomTab('bauwerke','Bauwerke')+bottomTab('kontrollen','Kontrollen')+'</div></div>'+(state.dialogs.project?projectDialog():'')+(state.dialogs.structure?structureDialog():'')+photoViewerHtml();
+  bindEvents();
+  hydratePhotoPreviews();
+  restoreFocus();
+}
 render();
+
 </script>
 </body>
 </html>
