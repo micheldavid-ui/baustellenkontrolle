@@ -125,8 +125,22 @@ function photoModalView(){var item=activePhotoModal&&activePhotoModal.items?acti
 function printExportContent(inner){
   var win = window.open('', '_blank');
   if(!win) return;
+  var headerHtml = ''
+    + '<div class="pdf-header">'
+    +   '<div class="pdf-header-left">'
+    +     '<div class="pdf-company">BÖGER + JÄCKLE</div>'
+    +     '<div class="pdf-company-sub">Gesellschaft Beratender Ingenieure mbH &amp; Co. KG</div>'
+    +     '<div>Heidekoppel 4 · 24558 Henstedt-Ulzburg</div>'
+    +     '<div>Telefon 04193/9008-0 · Telefax 04193/9008-44</div>'
+    +     '<div>info@boeger-jaeckle.de</div>'
+    +   '</div>'
+    +   '<div class="pdf-header-right">'
+    +     '<img src="data:image/png;base64,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" alt="Böger + Jäckle Logo">'
+    +   '</div>'
+    + '</div>'
+    + '<div class="pdf-header-line"></div>';
   var html = '<!doctype html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Export Kontrollbericht</title><style>'
-    + 'body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;color:#0f172a;background:#fff;margin:24px;line-height:1.45;}'
+    + 'body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;color:#0f172a;background:#fff;margin:24px;line-height:1.45;font-size:14px;}'
     + '.print-wrap{max-width:900px;margin:0 auto;}'
     + '.row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}'
     + '.card-title{font-size:1.3rem;font-weight:700;margin:0 0 16px 0;}'
@@ -134,10 +148,17 @@ function printExportContent(inner){
     + '.stack-sm,.stack-lg{display:flex;flex-direction:column;}'
     + '.stack-sm{gap:8px;}.stack-lg{gap:20px;}'
     + '.export-actions{display:none !important;}'
+    + '.pdf-header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:14px;}'
+    + '.pdf-header-left{flex:1;min-width:0;color:#6b7280;}'
+    + '.pdf-company{font-size:21px;font-weight:800;letter-spacing:0.2px;color:#6b7280;line-height:1.1;}'
+    + '.pdf-company-sub{font-size:15px;font-weight:700;color:#6b7280;margin-bottom:2px;}'
+    + '.pdf-header-left div{margin:0;}'
+    + '.pdf-header-right img{display:block;width:92px;height:auto;object-fit:contain;}'
+    + '.pdf-header-line{border-top:1px solid #9ca3af;margin:0 0 22px 0;}'
     + 'hr{border:none;border-top:1px solid #cbd5e1;margin:0;}'
     + 'strong{font-weight:700;}'
     + '@page{size:auto;margin:14mm;}'
-    + '</style></head><body><div class="print-wrap">'+inner+'</div></body></html>';
+    + '</style></head><body><div class="print-wrap">'+headerHtml+inner+'</div></body></html>';
   win.document.open();
   win.document.write(html);
   win.document.close();
