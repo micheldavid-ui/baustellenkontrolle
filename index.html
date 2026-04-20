@@ -125,6 +125,7 @@ function photoModalView(){var item=activePhotoModal&&activePhotoModal.items?acti
 function printExportContent(inner){
   var win = window.open('', '_blank');
   if(!win) return;
+
   var headerHtml = ''
     + '<div class="pdf-header">'
     +   '<div class="pdf-header-left">'
@@ -135,10 +136,28 @@ function printExportContent(inner){
     +     '<div>info@boeger-jaeckle.de</div>'
     +   '</div>'
     +   '<div class="pdf-header-right">'
-    +     '<img src="data:image/png;base64,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" alt="Böger + Jäckle Logo">'
+    +     '<img src="data:image/png;base64,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" alt="Böger + Jäckle Logo">'
     +   '</div>'
     + '</div>'
     + '<div class="pdf-header-line"></div>';
+
+  var controlsHtml = ''
+    + '<div class="print-controls" id="printControls">'
+    +   '<button type="button" class="print-btn print-btn-primary" onclick="window.print()">Drucken / PDF</button>'
+    +   '<button type="button" class="print-btn" onclick="window.close()">Schließen</button>'
+    + '</div>';
+
+  var closeScript = '<script>'
+    + '(function(){'
+    + 'var closeSoon=function(){setTimeout(function(){try{window.close();}catch(e){}},150);};'
+    + 'window.onafterprint=closeSoon;'
+    + 'window.addEventListener("afterprint", closeSoon);'
+    + 'window.addEventListener("keydown", function(e){if(e.key==="Escape"){window.close();}});'
+    + 'window.addEventListener("focus", function(){if(window.__printedOnce){closeSoon();}});'
+    + 'setTimeout(function(){window.__printedOnce=true; try{window.print();}catch(e){}}, 300);'
+    + '})();'
+    + '<\/script>';
+
   var html = '<!doctype html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Export Kontrollbericht</title><style>'
     + 'body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;color:#0f172a;background:#fff;margin:24px;line-height:1.45;font-size:14px;}'
     + '.print-wrap{max-width:900px;margin:0 auto;}'
@@ -155,21 +174,19 @@ function printExportContent(inner){
     + '.pdf-header-left div{margin:0;}'
     + '.pdf-header-right img{display:block;width:92px;height:auto;object-fit:contain;}'
     + '.pdf-header-line{border-top:1px solid #9ca3af;margin:0 0 22px 0;}'
-    + '.print-toolbar{display:flex;justify-content:flex-end;gap:10px;margin-bottom:18px;}'
-    + '.print-toolbar button{border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:10px;padding:10px 14px;font:inherit;cursor:pointer;}'
-    + '.print-toolbar .primary{background:#0f172a;color:#fff;border-color:#0f172a;}'
+    + '.print-controls{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin:0 0 18px 0;}'
+    + '.print-btn{border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:12px;padding:10px 14px;font:inherit;cursor:pointer;}'
+    + '.print-btn-primary{background:#0f172a;color:#fff;border-color:#0f172a;}'
     + 'hr{border:none;border-top:1px solid #cbd5e1;margin:0;}'
     + 'strong{font-weight:700;}'
-    + '@media print{.print-toolbar{display:none !important;}}'
     + '@page{size:auto;margin:14mm;}'
-    + '</style></head><body><div class="print-wrap"><div class="print-toolbar"><button type="button" onclick="window.close()">Schließen</button><button type="button" class="primary" onclick="window.print()">Drucken / PDF</button></div>'+headerHtml+inner+'</div><script>window.addEventListener("afterprint",function(){setTimeout(function(){window.close();},150);});window.addEventListener("keydown",function(e){if(e.key==="Escape"){window.close();}});</script></body></html>';
+    + '@media print{.print-controls{display:none !important;} body{margin:0;}}'
+    + '</style></head><body><div class="print-wrap">' + controlsHtml + headerHtml + inner + '</div>' + closeScript + '</body></html>';
+
   win.document.open();
   win.document.write(html);
   win.document.close();
   win.focus();
-  setTimeout(function(){
-    try { win.print(); } catch (e) {}
-  }, 250);
 }
 function structureDialog(){return '<div class="dialog-backdrop" data-close-dialog="structure"><div class="dialog" onclick="event.stopPropagation()"><div class="row between"><div class="card-title">'+(state.structureForm.id?'Bauwerk bearbeiten':'Neues Bauwerk anlegen')+'</div><button class="btn btn-ghost btn-icon" data-close-dialog="structure">×</button></div><div class="stack-md" style="margin-top:12px;"><div><label class="label">Bauwerk *</label><input class="input" value="'+escapeAttr(state.structureForm.name)+'" data-structure-form="name"></div><div class="grid-2"><button class="btn" data-action="create-structure" '+(!state.structureForm.name.trim()?'disabled':'')+'>'+(state.structureForm.id?'Speichern':'Anlegen')+'</button><button class="btn btn-outline" data-close-dialog="structure">Abbrechen</button></div></div></div></div>'}
 function escapeHtml(str){return String(str==null?'':str).replace(/[&<>"']/g,function(s){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]})}
