@@ -155,15 +155,21 @@ function printExportContent(inner){
     + '.pdf-header-left div{margin:0;}'
     + '.pdf-header-right img{display:block;width:92px;height:auto;object-fit:contain;}'
     + '.pdf-header-line{border-top:1px solid #9ca3af;margin:0 0 22px 0;}'
+    + '.print-toolbar{display:flex;justify-content:flex-end;gap:10px;margin-bottom:18px;}'
+    + '.print-toolbar button{border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:10px;padding:10px 14px;font:inherit;cursor:pointer;}'
+    + '.print-toolbar .primary{background:#0f172a;color:#fff;border-color:#0f172a;}'
     + 'hr{border:none;border-top:1px solid #cbd5e1;margin:0;}'
     + 'strong{font-weight:700;}'
+    + '@media print{.print-toolbar{display:none !important;}}'
     + '@page{size:auto;margin:14mm;}'
-    + '</style></head><body><div class="print-wrap">'+headerHtml+inner+'</div></body></html>';
+    + '</style></head><body><div class="print-wrap"><div class="print-toolbar"><button type="button" onclick="window.close()">Schließen</button><button type="button" class="primary" onclick="window.print()">Drucken / PDF</button></div>'+headerHtml+inner+'</div><script>window.addEventListener("afterprint",function(){setTimeout(function(){window.close();},150);});window.addEventListener("keydown",function(e){if(e.key==="Escape"){window.close();}});</script></body></html>';
   win.document.open();
   win.document.write(html);
   win.document.close();
   win.focus();
-  setTimeout(function(){ win.print(); }, 250);
+  setTimeout(function(){
+    try { win.print(); } catch (e) {}
+  }, 250);
 }
 function structureDialog(){return '<div class="dialog-backdrop" data-close-dialog="structure"><div class="dialog" onclick="event.stopPropagation()"><div class="row between"><div class="card-title">'+(state.structureForm.id?'Bauwerk bearbeiten':'Neues Bauwerk anlegen')+'</div><button class="btn btn-ghost btn-icon" data-close-dialog="structure">×</button></div><div class="stack-md" style="margin-top:12px;"><div><label class="label">Bauwerk *</label><input class="input" value="'+escapeAttr(state.structureForm.name)+'" data-structure-form="name"></div><div class="grid-2"><button class="btn" data-action="create-structure" '+(!state.structureForm.name.trim()?'disabled':'')+'>'+(state.structureForm.id?'Speichern':'Anlegen')+'</button><button class="btn btn-outline" data-close-dialog="structure">Abbrechen</button></div></div></div></div>'}
 function escapeHtml(str){return String(str==null?'':str).replace(/[&<>"']/g,function(s){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]})}
