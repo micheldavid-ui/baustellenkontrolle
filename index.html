@@ -238,15 +238,15 @@ function startSpeechRecognition(){
   speechActive=true;
   var baseNote=state.form.note||'';
   speechRecognition.onresult=function(e){
-    var final='';var interim='';
+    var finalText='';var interim='';
     for(var i=0;i<e.results.length;i++){
-      if(e.results[i].isFinal){final+=e.results[i][0].transcript;}
+      if(e.results[i].isFinal){finalText+=e.results[i][0].transcript;}
       else{interim+=e.results[i][0].transcript;}
     }
     var textarea=document.querySelector('[data-form="note"]');
-    if(textarea){textarea.value=(baseNote?(baseNote+' '):'')+final+interim;}
-    if(final){
-      var newNote=(baseNote?(baseNote+' '):'')+final;
+    if(textarea){textarea.value=(baseNote?(baseNote+' '):'')+finalText+interim;}
+    if(finalText){
+      var newNote=(baseNote?(baseNote+' '):'')+finalText;
       baseNote=newNote.trim();
       update(function(){state.form.note=baseNote;});
     }
