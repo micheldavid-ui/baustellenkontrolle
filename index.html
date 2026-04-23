@@ -261,6 +261,11 @@ function startSpeechRecognition(){
   };
   speechRecognition.onend=function(){
     speechActive=false;speechRecognition=null;
+    var textarea=document.querySelector('[data-form="note"]');
+    if(textarea&&textarea.value&&textarea.value!==(state.form.note||'')){
+      var val=textarea.value;
+      update(function(){state.form.note=val;});
+    }
     var btn=document.getElementById('speech-btn');
     if(btn){btn.textContent='🎤 Spracheingabe';btn.classList.remove('speech-active');}
   };
