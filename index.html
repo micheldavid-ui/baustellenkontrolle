@@ -177,7 +177,7 @@ function printExportContent(inner){
     + '.status-hinweis{background:var(--hint-bg);color:var(--hint-text);border:1px solid var(--hint-border);}'
     + '.status-mangel{background:var(--defect-bg);color:var(--defect-text);border:1px solid var(--defect-border);}'
     + '.hint{max-width:920px;margin:0 auto 12px auto;color:var(--muted);font-size:13px;}'
-    + '@media print{body{background:#fff !important;} .export-shell{padding:0 !important;} .export-toolbar,.hint{display:none !important;} .print-wrap{max-width:none;margin:0 !important;padding:16px !important;box-shadow:none !important;border:none !important;border-radius:0 !important;} @page{size:auto;margin:14mm;}}'
+    + '@media print{body,.export-shell,.print-wrap,*{background:#fff !important;} .export-shell{padding:0 !important;} .export-toolbar,.hint{display:none !important;} .print-wrap{max-width:none;margin:0 !important;padding:16px !important;box-shadow:none !important;border:none !important;border-radius:0 !important;} @page{size:auto;margin:14mm;}}'
     + '</style></head><body><div class="export-shell"><div class="export-toolbar"><button class="export-btn" id="printBtn">Drucken / PDF</button><button class="export-btn secondary" id="closeBtn">Schließen</button></div><div class="hint">Zum PDF-Export auf „Drucken / PDF“ tippen. Nach dem Export mit „Schließen“ zurückkehren.</div><div class="print-wrap">'+headerHtml+inner+'</div></div><script>'
     + 'document.getElementById("printBtn").addEventListener("click",function(){window.print();});'
     + 'document.getElementById("closeBtn").addEventListener("click",function(){window.close(); if(window.opener){ window.location.href = "about:blank"; }});'

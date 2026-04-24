@@ -5,3 +5,4 @@
 .Trashes
 git-setup/
 *.log
+.claude/
