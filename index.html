@@ -44,6 +44,18 @@
     .export-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
     .btn.speech-active{background:var(--defect-text);border-color:var(--defect-text);color:#fff;animation:speech-pulse 1.2s ease-in-out infinite}
     @keyframes speech-pulse{0%,100%{opacity:1}50%{opacity:.65}}
+    .auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--bg)}
+    .auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px;width:min(100%,420px);display:flex;flex-direction:column;gap:12px}
+    .auth-title{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:1.6rem;letter-spacing:-.02em}
+    .auth-sub{color:var(--muted);margin:0 0 8px;font-size:.92rem}
+    .auth-error{background:var(--defect-bg);color:var(--defect-text);border:1px solid var(--defect-border);padding:10px 12px;border-radius:10px;font-size:.88rem}
+    .auth-info{background:var(--ok-bg);color:var(--ok-text);border:1px solid var(--ok-border);padding:10px 12px;border-radius:10px;font-size:.88rem}
+    .sync-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+    .sync-badge{font-size:.74rem;cursor:default}
+    .sync-idle{color:var(--ok-text);border-color:var(--ok-border);background:var(--ok-bg)}
+    .sync-syncing,.sync-pending{color:var(--hint-text);border-color:var(--hint-border);background:var(--hint-bg)}
+    .sync-error{color:var(--defect-text);border-color:var(--defect-border);background:var(--defect-bg)}
+    .sync-offline{color:var(--muted)}
     @media print {
       body{background:#fff !important;}
       .topbar,.layout>.card,.bottom-nav,.dialog-backdrop,.photo-modal,.mobile-inline{display:none !important;}
@@ -57,6 +69,7 @@
     }
 
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 <div id="app"></div>
@@ -71,7 +84,7 @@ var photoSwipeStartX=null;
 function openPhotoGallery(items,startIndex){ if(!items||!items.length) return; activePhotoModal={items:items,index:Math.max(0,Math.min(startIndex||0,items.length-1))}; render(); }
 function changeActivePhoto(step){ if(!activePhotoModal||!activePhotoModal.items||!activePhotoModal.items.length) return; var len=activePhotoModal.items.length; activePhotoModal.index=(activePhotoModal.index+step+len)%len; render(); }
 function openPhotoDb(){return new Promise(function(resolve,reject){var req=indexedDB.open('baustellenkontrolle_photos',1);req.onupgradeneeded=function(e){var db=e.target.result;if(!db.objectStoreNames.contains('photos'))db.createObjectStore('photos',{keyPath:'id'})};req.onsuccess=function(){resolve(req.result)};req.onerror=function(){reject(req.error)}})}
-function storePhotoFiles(files){if(!files||!files.length)return Promise.resolve([]);return openPhotoDb().then(function(db){return Promise.all(files.map(function(file){return new Promise(function(resolve,reject){var id='ph_'+Date.now()+'_'+Math.random().toString(36).slice(2,9);var tx=db.transaction('photos','readwrite');tx.objectStore('photos').put({id:id,blob:file,name:file.name||'Foto',type:file.type||'',createdAt:new Date().toISOString()});tx.oncomplete=function(){resolve({id:id,name:file.name||'Foto'})};tx.onerror=function(){reject(tx.error)}})}))})}
+function storePhotoFiles(files){if(!files||!files.length)return Promise.resolve([]);return openPhotoDb().then(function(db){return Promise.all(files.map(function(file){return new Promise(function(resolve,reject){var id=(typeof newUuid==='function')?newUuid():('ph_'+Date.now()+'_'+Math.random().toString(36).slice(2,9));var tx=db.transaction('photos','readwrite');tx.objectStore('photos').put({id:id,blob:file,name:file.name||'Foto',type:file.type||'',createdAt:new Date().toISOString()});tx.oncomplete=function(){resolve({id:id,name:file.name||'Foto'})};tx.onerror=function(){reject(tx.error)}})}))})}
 function getPhotoBlob(id){return openPhotoDb().then(function(db){return new Promise(function(resolve,reject){var tx=db.transaction('photos','readonly');var req=tx.objectStore('photos').get(id);req.onsuccess=function(){resolve(req.result?req.result.blob:null)};req.onerror=function(){reject(req.error)}})})}
 function deletePhotoRefs(refs){refs=refs||[];if(!refs.length)return Promise.resolve();return openPhotoDb().then(function(db){return Promise.all(refs.map(function(ref){return new Promise(function(resolve,reject){var tx=db.transaction('photos','readwrite');tx.objectStore('photos').delete(ref.id);tx.oncomplete=function(){resolve()};tx.onerror=function(){reject(tx.error)}})}))})}
 function collectPointPhotoRefs(point){return (point&&point.photoRefs)||[]}
@@ -101,14 +114,14 @@ function openProjectDialog(edit){state.projectForm=edit?{id:edit.id,name:edit.na
 function openStructureDialog(edit){state.structureForm=edit?{id:edit.id,name:edit.name}:{id:null,name:''};state.dialogs.structure=true;render()}
 function selectProjectAction(project){update(function(){state.selectedProjectId=project.id;state.selectedStructureId=project.structures[0]?project.structures[0].id:'';state.selectedInspectionId=project.structures[0]&&project.structures[0].inspections[0]?project.structures[0].inspections[0].id:'';state.tab='bauwerke'})}
 function selectStructureAction(structure){update(function(){state.selectedStructureId=structure.id;state.selectedInspectionId=structure.inspections[0]?structure.inspections[0].id:'';state.tab='kontrollen'})}
-function createProject(){if(!state.projectForm.name.trim())return;update(function(){if(state.projectForm.id){state.projects=state.projects.map(function(project){return project.id!==state.projectForm.id?project:{id:project.id,name:state.projectForm.name.trim(),location:state.projectForm.location.trim(),favorite:project.favorite,structures:project.structures}})}else{var stamp=Date.now();var newProject={id:'p'+stamp,name:state.projectForm.name.trim(),location:state.projectForm.location.trim(),favorite:false,structures:[{id:'s'+stamp,name:state.projectForm.firstStructure.trim()||'Bauwerk 1',inspections:[]}]};state.projects.unshift(newProject);state.selectedProjectId=newProject.id;state.selectedStructureId=newProject.structures[0].id;state.selectedInspectionId='';state.tab='bauwerke'}state.dialogs.project=false;state.projectForm={id:null,name:'',location:'',firstStructure:''}})}
-function createStructure(){var project=selectedProject();if(!project||!state.structureForm.name.trim())return;update(function(){if(state.structureForm.id){project.structures=project.structures.map(function(structure){return structure.id!==state.structureForm.id?structure:{id:structure.id,name:state.structureForm.name.trim(),inspections:structure.inspections}});state.selectedStructureId=state.structureForm.id}else{var stamp=Date.now();var newStructure={id:'s'+stamp,name:state.structureForm.name.trim(),inspections:[]};project.structures.push(newStructure);state.selectedStructureId=newStructure.id;state.selectedInspectionId=''}state.tab='bauwerke';state.dialogs.structure=false;state.structureForm={id:null,name:''}})}
+function createProject(){if(!state.projectForm.name.trim())return;update(function(){if(state.projectForm.id){state.projects=state.projects.map(function(project){return project.id!==state.projectForm.id?project:{id:project.id,name:state.projectForm.name.trim(),location:state.projectForm.location.trim(),favorite:project.favorite,structures:project.structures}})}else{var newProject={id:newUuid(),name:state.projectForm.name.trim(),location:state.projectForm.location.trim(),favorite:false,structures:[{id:newUuid(),name:state.projectForm.firstStructure.trim()||'Bauwerk 1',inspections:[]}]};state.projects.unshift(newProject);state.selectedProjectId=newProject.id;state.selectedStructureId=newProject.structures[0].id;state.selectedInspectionId='';state.tab='bauwerke'}state.dialogs.project=false;state.projectForm={id:null,name:'',location:'',firstStructure:''}})}
+function createStructure(){var project=selectedProject();if(!project||!state.structureForm.name.trim())return;update(function(){if(state.structureForm.id){project.structures=project.structures.map(function(structure){return structure.id!==state.structureForm.id?structure:{id:structure.id,name:state.structureForm.name.trim(),inspections:structure.inspections}});state.selectedStructureId=state.structureForm.id}else{var newStructure={id:newUuid(),name:state.structureForm.name.trim(),inspections:[]};project.structures.push(newStructure);state.selectedStructureId=newStructure.id;state.selectedInspectionId=''}state.tab='bauwerke';state.dialogs.structure=false;state.structureForm={id:null,name:''}})}
 function deleteStructure(id){var project=selectedProject();if(!project)return;var structure=project.structures.find(function(x){return x.id===id});var refs=collectStructurePhotoRefs(structure);deletePhotoRefs(refs).catch(function(){});update(function(){project.structures=project.structures.filter(function(structure){return structure.id!==id});var first=project.structures[0];state.selectedStructureId=first?first.id:'';state.selectedInspectionId=first&&first.inspections[0]?first.inspections[0].id:''})}
-function createInspection(){var structure=selectedStructure();if(!structure)return;haptic(25);var inspEl=document.getElementById('inspector-input');var inspName=(inspEl?inspEl.value.trim():'')||lastInspector;lastInspector=inspName;localStorage.setItem('lastInspector',inspName);update(function(){var newInspection={id:'i'+Date.now(),date:todayIso(),inspector:inspName,points:[]};structure.inspections.unshift(newInspection);state.selectedInspectionId=newInspection.id;state.expandedInspectionIds[newInspection.id]=false;state.tab='kontrollen'})}
+function createInspection(){var structure=selectedStructure();if(!structure)return;haptic(25);var inspEl=document.getElementById('inspector-input');var inspName=(inspEl?inspEl.value.trim():'')||lastInspector;lastInspector=inspName;localStorage.setItem('lastInspector',inspName);update(function(){var newInspection={id:newUuid(),date:todayIso(),inspector:inspName,points:[]};structure.inspections.unshift(newInspection);state.selectedInspectionId=newInspection.id;state.expandedInspectionIds[newInspection.id]=false;state.tab='kontrollen'})}
 function deleteInspection(id){var structure=selectedStructure();if(!structure)return;var inspection=structure.inspections.find(function(x){return x.id===id});deletePhotoRefs(collectInspectionPhotoRefs(inspection)).catch(function(){});update(function(){structure.inspections=structure.inspections.filter(function(i){return i.id!==id});delete state.expandedInspectionIds[id];if(state.selectedInspectionId===id)state.selectedInspectionId=structure.inspections[0]?structure.inspections[0].id:''})}
 function deleteProject(id){update(function(){state.projects=state.projects.filter(function(p){return p.id!==id});var p=state.projects[0];if(p){state.selectedProjectId=p.id;state.selectedStructureId=p.structures[0]?p.structures[0].id:'';state.selectedInspectionId=p.structures[0]&&p.structures[0].inspections[0]?p.structures[0].inspections[0].id:''}else{state.selectedProjectId='';state.selectedStructureId='';state.selectedInspectionId=''}})}
 function toggleFavorite(id){update(function(){var p=state.projects.find(function(x){return x.id===id});if(p)p.favorite=!p.favorite})}
-function savePoint(opts){opts=opts||{};if(document.activeElement&&document.activeElement.blur){document.activeElement.blur();}haptic(35);var inspection=selectedInspection();if(!inspection||!state.form.component.trim())return;var existingRefs=(state.form.photoRefs||[]).slice();storePhotoFiles(pendingPhotoFiles).then(function(newRefs){update(function(){var mergedRefs=existingRefs.concat(newRefs);var mergedNames=mergedRefs.map(function(ref){return ref.name||'Foto'});var payload={component:state.form.component.trim(),aspect:state.form.aspect.trim(),status:state.form.status,note:state.form.note.trim(),photos:mergedRefs.length,photoNames:mergedNames,photoRefs:mergedRefs};if(state.editingPointId){inspection.points=inspection.points.map(function(p){return p.id!==state.editingPointId?p:{id:p.id,component:payload.component,aspect:payload.aspect,status:payload.status,note:payload.note,photos:payload.photos,photoNames:payload.photoNames,photoRefs:payload.photoRefs,createdAt:p.createdAt}})}else{inspection.points.unshift({id:'pt'+Date.now(),component:payload.component,aspect:payload.aspect,status:payload.status,note:payload.note,photos:payload.photos,photoNames:payload.photoNames,photoRefs:payload.photoRefs,createdAt:nowTime()})}resetPointForm(!!opts.keepComponent);if(opts.closeAfter){state.tab='kontrollen'}else{setTimeout(function(){window.scrollTo({top:0,behavior:'smooth'})},0)}})}).catch(function(err){console.error(err);alert('Fotos konnten nicht gespeichert werden.')})}
+function savePoint(opts){opts=opts||{};if(document.activeElement&&document.activeElement.blur){document.activeElement.blur();}haptic(35);var inspection=selectedInspection();if(!inspection||!state.form.component.trim())return;var existingRefs=(state.form.photoRefs||[]).slice();storePhotoFiles(pendingPhotoFiles).then(function(newRefs){update(function(){var mergedRefs=existingRefs.concat(newRefs);var mergedNames=mergedRefs.map(function(ref){return ref.name||'Foto'});var payload={component:state.form.component.trim(),aspect:state.form.aspect.trim(),status:state.form.status,note:state.form.note.trim(),photos:mergedRefs.length,photoNames:mergedNames,photoRefs:mergedRefs};if(state.editingPointId){inspection.points=inspection.points.map(function(p){return p.id!==state.editingPointId?p:{id:p.id,component:payload.component,aspect:payload.aspect,status:payload.status,note:payload.note,photos:payload.photos,photoNames:payload.photoNames,photoRefs:payload.photoRefs,createdAt:p.createdAt}})}else{inspection.points.unshift({id:newUuid(),component:payload.component,aspect:payload.aspect,status:payload.status,note:payload.note,photos:payload.photos,photoNames:payload.photoNames,photoRefs:payload.photoRefs,createdAt:nowTime()})}resetPointForm(!!opts.keepComponent);if(opts.closeAfter){state.tab='kontrollen'}else{setTimeout(function(){window.scrollTo({top:0,behavior:'smooth'})},0)}})}).catch(function(err){console.error(err);alert('Fotos konnten nicht gespeichert werden.')})}
 function editPoint(id){var inspection=selectedInspection();if(!inspection)return;var point=inspection.points.find(function(p){return p.id===id});if(!point)return;state.editingPointId=id;pendingPhotoFiles=[];state.form={component:point.component,aspect:point.aspect,status:point.status,note:point.note,photoAttached:(point.photos||0)>0,photoCount:point.photos||0,photoNames:point.photoNames||[],photoRefs:point.photoRefs||[]};state.tab='neu';saveState();render()}
 function deletePoint(id){haptic([20,30,20]);var inspection=selectedInspection();if(!inspection)return;var point=inspection.points.find(function(p){return p.id===id});deletePhotoRefs(collectPointPhotoRefs(point)).catch(function(){});update(function(){inspection.points=inspection.points.filter(function(p){return p.id!==id});if(state.editingPointId===id)resetPointForm(false)})}
 function groupedPoints(){var inspection=selectedInspection(),map=new Map();(inspection?inspection.points:[]).forEach(function(point){var key=(point.component||'').trim()||'Ohne Bauteil';if(!map.has(key))map.set(key,[]);map.get(key).push(point)});return Array.from(map.entries())}
@@ -280,7 +293,449 @@ function startSpeechRecognition(){
 }
 function bindEvents(){document.querySelectorAll('[data-tab]').forEach(function(el){el.onclick=function(){update(function(){state.tab=el.dataset.tab})}});var actionMap={'toggle-nav':function(){update(function(){state.isMobileNavOpen=!state.isMobileNavOpen})},'toggle-favorites':function(){update(function(){state.favoritesOnly=!state.favoritesOnly})},'open-project-dialog':function(){openProjectDialog(null)},'open-structure-dialog':function(){openStructureDialog(null)},'create-inspection':function(){createInspection()},'cancel-edit':function(){update(function(){resetPointForm(false)})},'create-project':function(){createProject()},'create-structure':function(){createStructure()},'new-point':function(){update(function(){resetPointForm(false); state.tab='neu'})},'print-export':function(){var exportRoot=document.querySelector('.print-export-root');if(!exportRoot)return;printExportContent(exportRoot.innerHTML)},'speech':function(){startSpeechRecognition()}};document.querySelectorAll('[data-action]').forEach(function(el){el.onclick=function(){var fn=actionMap[el.dataset.action];if(fn)fn()}});document.querySelectorAll('[data-select-project]').forEach(function(el){el.onclick=function(){var project=state.projects.find(function(p){return p.id===el.dataset.selectProject});if(project)selectProjectAction(project)}});document.querySelectorAll('[data-select-structure]').forEach(function(el){el.onclick=function(){var p=selectedProject();if(!p)return;var s=p.structures.find(function(x){return x.id===el.dataset.selectStructure});if(s)selectStructureAction(s)}});document.querySelectorAll('[data-edit-structure]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var p=selectedProject();if(!p)return;var s=p.structures.find(function(x){return x.id===el.dataset.editStructure});if(s)openStructureDialog(s)}});document.querySelectorAll('[data-delete-structure]').forEach(function(el){el.onclick=function(e){e.stopPropagation();deleteStructure(el.dataset.deleteStructure)}});document.querySelectorAll('[data-select-inspection]').forEach(function(el){el.onclick=function(){update(function(){state.selectedInspectionId=el.dataset.selectInspection})}});document.querySelectorAll('[data-toggle-inspection]').forEach(function(el){el.onclick=function(){update(function(){var id=el.dataset.toggleInspection;state.selectedInspectionId=id;state.expandedInspectionIds[id]=!state.expandedInspectionIds[id]})}});document.querySelectorAll('[data-delete-inspection]').forEach(function(el){el.onclick=function(){deleteInspection(el.dataset.deleteInspection)}});document.querySelectorAll('[data-delete-project]').forEach(function(el){el.onclick=function(e){e.stopPropagation();deleteProject(el.dataset.deleteProject)}});document.querySelectorAll('[data-fav]').forEach(function(el){el.onclick=function(e){e.stopPropagation();toggleFavorite(el.dataset.fav)}});document.querySelectorAll('[data-edit-project]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var p=state.projects.find(function(x){return x.id===el.dataset.editProject});if(p)openProjectDialog(p)}});document.querySelectorAll('[data-chip-component]').forEach(function(el){el.onclick=function(){update(function(){state.form.component=el.dataset.chipComponent})}});document.querySelectorAll('[data-chip-aspect]').forEach(function(el){el.onclick=function(){update(function(){state.form.aspect=el.dataset.chipAspect})}});document.querySelectorAll('[data-status]').forEach(function(el){el.onclick=function(){haptic(12);update(function(){state.form.status=el.dataset.status})}});document.querySelectorAll('[data-edit-point]').forEach(function(el){el.onclick=function(){editPoint(el.dataset.editPoint)}});document.querySelectorAll('[data-delete-point]').forEach(function(el){el.onclick=function(){deletePoint(el.dataset.deletePoint)}});document.querySelectorAll('[data-save]').forEach(function(el){el.onclick=function(){savePoint(el.dataset.save==='close'?{closeAfter:true}:el.dataset.save==='keep'?{keepComponent:true}:{})}});document.querySelectorAll('[data-close-dialog]').forEach(function(el){el.onclick=function(){update(function(){state.dialogs[el.dataset.closeDialog]=false})}});document.querySelectorAll('[data-field="search"]').forEach(function(el){el.oninput=function(){pendingFocus=captureFocus();update(function(){state.search=el.value})}});document.querySelectorAll('[data-form]').forEach(function(el){el.oninput=function(){pendingFocus=captureFocus();update(function(){state.form[el.dataset.form]=el.value})}});document.querySelectorAll('[data-project-form]').forEach(function(el){el.oninput=function(){pendingFocus=captureFocus();state.projectForm[el.dataset.projectForm]=el.value;render()}});document.querySelectorAll('[data-structure-form]').forEach(function(el){el.oninput=function(){pendingFocus=captureFocus();state.structureForm[el.dataset.structureForm]=el.value;render()}});document.querySelectorAll('[data-close-photo-modal]').forEach(function(el){el.onclick=function(){activePhotoModal=null;render()}});document.querySelectorAll('[data-photo-nav]').forEach(function(el){el.onclick=function(e){e.stopPropagation();changeActivePhoto(el.dataset.photoNav==='next'?1:-1)}});var swipeEl=document.querySelector('[data-photo-swipe="1"]');if(swipeEl){swipeEl.addEventListener('touchstart',function(e){if(e.touches&&e.touches[0])photoSwipeStartX=e.touches[0].clientX},{passive:true});swipeEl.addEventListener('touchend',function(e){if(photoSwipeStartX==null)return;var endX=e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientX:photoSwipeStartX;var delta=endX-photoSwipeStartX;photoSwipeStartX=null;if(Math.abs(delta)>40){changeActivePhoto(delta<0?1:-1)}});}var inspInp=document.getElementById('inspector-input');if(inspInp){inspInp.oninput=function(){lastInspector=inspInp.value;localStorage.setItem('lastInspector',lastInspector);};}var photoInput=document.getElementById('photo-input');if(photoInput){photoInput.onchange=function(){update(function(){var files=Array.from(photoInput.files||[]);pendingPhotoFiles=pendingPhotoFiles.concat(files);var existingRefs=state.form.photoRefs||[];state.form.photoAttached=(existingRefs.length+pendingPhotoFiles.length)>0;state.form.photoCount=existingRefs.length+pendingPhotoFiles.length;state.form.photoNames=existingRefs.map(function(ref){return ref.name||'Foto'}).concat(pendingPhotoFiles.map(function(f){return f.name||'Foto'}))});photoInput.value='';}}}
 function render(){ensureSelection();var app=document.getElementById('app'),project=selectedProject(),structure=selectedStructure(),inspection=selectedInspection();var navTitle=state.tab==='projekte'?'Projekte':state.tab==='bauwerke'?'Bauwerke':state.tab==='kontrollen'?'Kontrollen':state.tab==='neu'?'Prüfpunkt':'Navigation';app.innerHTML='<div class="app"><div class="topbar"><div><h1 class="title">Baustellenkontrolle</h1><p class="subtitle">Prototyp für die mobile Erfassung statisch-konstruktiver Kontrollen</p></div><div class="row wrap"><span class="badge">'+escapeHtml(project?project.name:'')+'</span><span class="badge">'+escapeHtml(structure?structure.name:'')+'</span></div></div><div class="layout"><div class="card"><div class="card-header"><div class="card-title">'+navTitle+'</div></div><div class="card-content stack-md"><div class="tabs desktop-only">'+tabButton('projekte','Projekte')+tabButton('bauwerke','Bauwerke')+tabButton('kontrollen','Kontrollen')+'</div>'+(state.tab==='projekte'?projectsView():'')+(state.tab==='bauwerke'?structuresView(project):'')+(state.tab==='kontrollen'?inspectionsView(structure):'')+(state.tab==='neu'?pointFormView():'')+'</div><div class="stack-lg">'+(state.tab==='projekte'?'':state.tab==='bauwerke'?inspectionAccordionView(structure):'<div class="content-grid"><div class="card"><div class="card-header"><div class="card-title">Kontrolle '+(inspection?formatDate(inspection.date):'–')+'</div></div><div class="card-content"><div class="scroll large stack-sm">'+pointsView(inspection)+'</div></div></div>'+(state.tab==='kontrollen'?exportView(project,structure,inspection):'')+'</div>')+'</div></div></div><div class="bottom-nav mobile-only"><div class="bottom-nav-grid">'+bottomTab('projekte','Projekte')+bottomTab('bauwerke','Bauwerke')+bottomTab('kontrollen','Kontrollen')+'</div></div>'+(state.dialogs.project?projectDialog():'')+(state.dialogs.structure?structureDialog():'')+(activePhotoModal?photoModalView():'');bindEvents();restoreFocus();hydratePhotoStrips()}
-render();
+// ============================================================================
+// CLOUD-SYNC mit Supabase
+// ============================================================================
+var SUPABASE_URL='https://izlgbqfabbnrmxtqhets.supabase.co';
+var SUPABASE_KEY='sb_publishable_fce7qa6w1wTaYiGu1T71uw_0YE4qPj1';
+var supa=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}}):null;
+var session=null;
+var syncTimer=null;
+var syncStatus='idle';
+var lastSyncError=null;
+var isOnline=(typeof navigator!=='undefined'&&'onLine' in navigator)?navigator.onLine:true;
+var photoUploadQueue=[];
+try{photoUploadQueue=JSON.parse(localStorage.getItem('photoUploadQueue')||'[]')||[]}catch(e){photoUploadQueue=[]}
+var photoUploadRunning=false;
+
+function isUuidLike(s){return typeof s==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)}
+function newUuid(){if(crypto&&crypto.randomUUID)return crypto.randomUUID();var rnd=function(n){var s='';for(var i=0;i<n;i++)s+=Math.floor(Math.random()*16).toString(16);return s};return rnd(8)+'-'+rnd(4)+'-4'+rnd(3)+'-'+rnd(4)+'-'+rnd(12)}
+
+function migrateLocalIdsToUuid(){
+  var idMap={};
+  function remap(oldId){if(!oldId)return oldId;if(isUuidLike(oldId))return oldId;if(!idMap[oldId])idMap[oldId]=newUuid();return idMap[oldId]}
+  (state.projects||[]).forEach(function(p){p.id=remap(p.id);(p.structures||[]).forEach(function(s){s.id=remap(s.id);(s.inspections||[]).forEach(function(i){i.id=remap(i.id);(i.points||[]).forEach(function(pt){pt.id=remap(pt.id)})})})});
+  state.selectedProjectId=remap(state.selectedProjectId);
+  state.selectedStructureId=remap(state.selectedStructureId);
+  state.selectedInspectionId=remap(state.selectedInspectionId);
+  var newExp={};Object.keys(state.expandedInspectionIds||{}).forEach(function(k){newExp[remap(k)]=state.expandedInspectionIds[k]});state.expandedInspectionIds=newExp;
+  // Migrate any queued photo uploads referencing old pointIds
+  photoUploadQueue.forEach(function(it){if(!isUuidLike(it.pointId)&&idMap[it.pointId])it.pointId=idMap[it.pointId]});
+  localStorage.setItem('photoUploadQueue',JSON.stringify(photoUploadQueue));
+  saveState();
+}
+
+function migratePhotoIdsAsync(){
+  var pairs=[];
+  (state.projects||[]).forEach(function(p){(p.structures||[]).forEach(function(s){(s.inspections||[]).forEach(function(i){(i.points||[]).forEach(function(pt){(pt.photoRefs||[]).forEach(function(ref){if(ref&&ref.id&&!isUuidLike(ref.id)){var oldId=ref.id;var newId=newUuid();ref.id=newId;pairs.push({oldId:oldId,newId:newId})}})})})})});
+  if(!pairs.length){return Promise.resolve()}
+  return openPhotoDb().then(function(db){
+    return Promise.all(pairs.map(function(pair){
+      return new Promise(function(resolve){
+        var tx=db.transaction('photos','readwrite');
+        var store=tx.objectStore('photos');
+        var getReq=store.get(pair.oldId);
+        getReq.onsuccess=function(){
+          var rec=getReq.result;
+          if(rec){rec.id=pair.newId;store.put(rec);store.delete(pair.oldId)}
+          resolve();
+        };
+        getReq.onerror=function(){resolve()};
+      });
+    }));
+  }).then(function(){
+    photoUploadQueue.forEach(function(q){var pair=pairs.find(function(p){return p.oldId===q.photoId});if(pair)q.photoId=pair.newId});
+    try{localStorage.setItem('photoUploadQueue',JSON.stringify(photoUploadQueue))}catch(e){}
+    saveState();
+  });
+}
+
+function setSyncStatus(s,err){syncStatus=s;lastSyncError=err||null;if(err){try{console.error('[Sync]',err)}catch(e){}}updateSyncBadge()}
+function formatSyncError(err){
+  if(!err)return '';
+  if(typeof err==='string')return err;
+  var parts=[];
+  if(err.message)parts.push(err.message);
+  if(err.code)parts.push('Code: '+err.code);
+  if(err.details)parts.push('Details: '+err.details);
+  if(err.hint)parts.push('Hinweis: '+err.hint);
+  if(!parts.length){try{parts.push(JSON.stringify(err))}catch(e){parts.push(String(err))}}
+  return parts.join('\n');
+}
+function showSyncError(){
+  if(syncStatus!=='error'||!lastSyncError){alert('Status: '+syncStatus);return}
+  alert('Sync-Fehler:\n\n'+formatSyncError(lastSyncError));
+}
+function updateSyncBadge(){var b=document.getElementById('sync-badge');if(!b)return;var labels={idle:'✓ Synchron',syncing:'⟳ Sync...',pending:'⋯ Wartet',error:'⚠ Fehler (tippen)',offline:'⊘ Offline'};b.textContent=labels[syncStatus]||'';b.className='badge sync-badge sync-'+syncStatus;b.title=lastSyncError?formatSyncError(lastSyncError):'';b.style.cursor='pointer';b.onclick=showSyncError}
+
+// ----------------------- Auth UI ------------------------------------------
+function renderPasswordSetScreen(opts){
+  opts=opts||{};
+  var app=document.getElementById('app');
+  app.innerHTML='<div class="auth-screen"><div class="auth-card">'
+    +'<h1 class="auth-title">Neues Passwort setzen</h1>'
+    +'<p class="auth-sub">Lege ein Passwort für deinen Account fest. Du brauchst es bei jedem zukünftigen Login.</p>'
+    +(opts.error?'<div class="auth-error">'+escapeHtml(opts.error)+'</div>':'')
+    +(opts.info?'<div class="auth-info">'+escapeHtml(opts.info)+'</div>':'')
+    +'<div><label class="label">Neues Passwort</label><input class="input" id="pw-new" type="password" autocomplete="new-password" placeholder="mindestens 8 Zeichen"></div>'
+    +'<div><label class="label">Passwort wiederholen</label><input class="input" id="pw-confirm" type="password" autocomplete="new-password"></div>'
+    +'<button class="btn" id="pw-submit" style="width:100%">Passwort speichern</button>'
+    +'</div></div>';
+  var newEl=document.getElementById('pw-new');
+  var confEl=document.getElementById('pw-confirm');
+  var btn=document.getElementById('pw-submit');
+  function submit(){
+    var pw=newEl.value||'';
+    var pw2=confEl.value||'';
+    if(pw.length<8){renderPasswordSetScreen({error:'Passwort muss mindestens 8 Zeichen lang sein.'});return}
+    if(pw!==pw2){renderPasswordSetScreen({error:'Die beiden Passwörter stimmen nicht überein.'});return}
+    btn.disabled=true;btn.textContent='Speichere...';
+    supa.auth.updateUser({password:pw}).then(function(res){
+      if(res.error){renderPasswordSetScreen({error:res.error.message||'Speichern fehlgeschlagen.'});return}
+      // Strip recovery hash from URL
+      if(window.history&&window.history.replaceState){
+        var clean=window.location.pathname+window.location.search;
+        window.history.replaceState({},document.title,clean);
+      }
+      // User is already authenticated via recovery — go straight into app
+      supa.auth.getSession().then(function(r){
+        if(r&&r.data&&r.data.session){startSession(r.data.session)}
+        else{renderAuthScreen({info:'Passwort gespeichert. Bitte einloggen.'})}
+      });
+    }).catch(function(err){renderPasswordSetScreen({error:String(err&&err.message||err)})});
+  }
+  btn.onclick=submit;
+  confEl.onkeydown=function(e){if(e.key==='Enter')submit()};
+  newEl.focus();
+}
+
+function detectRecoveryInUrl(){
+  // Supabase puts recovery params in hash after redirect: #access_token=...&type=recovery&...
+  var hash=window.location.hash||'';
+  if(!hash||hash.length<2)return false;
+  var params=new URLSearchParams(hash.slice(1));
+  return params.get('type')==='recovery';
+}
+
+function renderAuthScreen(opts){
+  opts=opts||{};
+  var app=document.getElementById('app');
+  var lastEmail='';try{lastEmail=localStorage.getItem('lastAuthEmail')||''}catch(e){}
+  app.innerHTML='<div class="auth-screen"><div class="auth-card">'
+    +'<h1 class="auth-title">Baustellenkontrolle</h1>'
+    +'<p class="auth-sub">Anmeldung erforderlich</p>'
+    +(opts.error?'<div class="auth-error">'+escapeHtml(opts.error)+'</div>':'')
+    +(opts.info?'<div class="auth-info">'+escapeHtml(opts.info)+'</div>':'')
+    +'<div><label class="label">Email</label><input class="input" id="auth-email" type="email" autocomplete="username" value="'+escapeAttr(lastEmail)+'"></div>'
+    +'<div><label class="label">Passwort</label><input class="input" id="auth-password" type="password" autocomplete="current-password"></div>'
+    +'<button class="btn" id="auth-submit" style="width:100%">Anmelden</button>'
+    +'<div class="fine">Du wurdest noch nicht eingeladen? Frag den Admin, dich im Supabase-Dashboard hinzuzufügen.</div>'
+    +'</div></div>';
+  var emailEl=document.getElementById('auth-email');
+  var pwEl=document.getElementById('auth-password');
+  var btn=document.getElementById('auth-submit');
+  function submit(){
+    var email=(emailEl.value||'').trim();
+    var pw=pwEl.value||'';
+    if(!email||!pw){renderAuthScreen({error:'Bitte Email und Passwort eingeben.'});return}
+    btn.disabled=true;btn.textContent='Anmelde...';
+    try{localStorage.setItem('lastAuthEmail',email)}catch(e){}
+    supa.auth.signInWithPassword({email:email,password:pw}).then(function(res){
+      if(res.error){renderAuthScreen({error:res.error.message||'Anmeldung fehlgeschlagen.'})}
+      else{startSession(res.data.session)}
+    }).catch(function(err){renderAuthScreen({error:String(err&&err.message||err)})});
+  }
+  btn.onclick=submit;
+  pwEl.onkeydown=function(e){if(e.key==='Enter')submit()};
+  if(!emailEl.value)emailEl.focus();else pwEl.focus();
+}
+
+function startSession(s){
+  session=s;
+  setSyncStatus('syncing');
+  migrateLocalIdsToUuid();
+  migratePhotoIdsAsync().then(function(){
+    queueNewPhotoUploads();
+    return cloudInitialSync();
+  }).then(function(){
+    setSyncStatus(isOnline?'idle':'offline');
+    render();
+    processPhotoUploads();
+  }).catch(function(err){
+    console.error('Initial sync failed',err);
+    setSyncStatus(isOnline?'error':'offline',err);
+    render();
+  });
+}
+
+function doLogout(){
+  if(!supa)return;
+  if(!confirm('Wirklich abmelden? Lokale Daten bleiben erhalten, werden aber nicht mehr synchronisiert.'))return;
+  supa.auth.signOut().then(function(){
+    session=null;
+    renderAuthScreen({info:'Du wurdest abgemeldet.'});
+  });
+}
+
+// ----------------------- Cloud read --------------------------------------
+function cloudInitialSync(){
+  if(!supa||!session)return Promise.reject(new Error('Nicht angemeldet'));
+  return Promise.all([
+    supa.from('projects').select('*'),
+    supa.from('structures').select('*'),
+    supa.from('inspections').select('*'),
+    supa.from('points').select('*'),
+    supa.from('photos').select('*')
+  ]).then(function(r){
+    var errs=r.filter(function(x){return x.error});
+    if(errs.length)throw errs[0].error;
+    var ps=r[0].data||[],ss=r[1].data||[],is=r[2].data||[],pts=r[3].data||[],phs=r[4].data||[];
+    if(!ps.length&&state.projects&&state.projects.length){
+      // Cloud empty + local has data → initial migration upload
+      return cloudPushAllNow();
+    }
+    var photosByPoint={};phs.forEach(function(ph){(photosByPoint[ph.point_id]=photosByPoint[ph.point_id]||[]).push(ph)});
+    var newProjects=ps.map(function(p){
+      var pStr=ss.filter(function(s){return s.project_id===p.id}).map(function(s){
+        var sIns=is.filter(function(i){return i.structure_id===s.id}).map(function(i){
+          var iPts=pts.filter(function(pt){return pt.inspection_id===i.id}).map(function(pt){
+            var pRefs=(photosByPoint[pt.id]||[]).map(function(ph){return {id:ph.id,name:ph.name||'Foto',storage_path:ph.storage_path,remote:true}});
+            return {id:pt.id,component:pt.component,aspect:pt.aspect||'',status:pt.status,note:pt.note||'',createdAt:pt.created_at_local||'',photos:pRefs.length,photoNames:pRefs.map(function(x){return x.name}),photoRefs:pRefs};
+          });
+          return {id:i.id,date:i.date,inspector:i.inspector||'',points:iPts};
+        });
+        return {id:s.id,name:s.name,inspections:sIns};
+      });
+      return {id:p.id,name:p.name,location:p.location||'',favorite:!!p.favorite,structures:pStr};
+    });
+    state.projects=newProjects;
+    ensureSelection();
+    saveState();
+  });
+}
+
+// ----------------------- Cloud write -------------------------------------
+function collectLocalRows(){
+  var P=[],S=[],I=[],PT=[];
+  (state.projects||[]).forEach(function(p){
+    P.push({id:p.id,name:p.name,location:p.location||'',favorite:!!p.favorite});
+    (p.structures||[]).forEach(function(s){
+      S.push({id:s.id,project_id:p.id,name:s.name});
+      (s.inspections||[]).forEach(function(i){
+        I.push({id:i.id,structure_id:s.id,date:i.date,inspector:i.inspector||''});
+        (i.points||[]).forEach(function(pt){
+          PT.push({id:pt.id,inspection_id:i.id,component:pt.component||'',aspect:pt.aspect||'',status:pt.status||'OK',note:pt.note||'',created_at_local:pt.createdAt||''});
+        });
+      });
+    });
+  });
+  return {P:P,S:S,I:I,PT:PT};
+}
+
+function cloudPushAllNow(){
+  if(!supa||!session)return Promise.reject(new Error('Nicht angemeldet'));
+  var rows=collectLocalRows();
+  return Promise.all([
+    supa.from('projects').select('id'),
+    supa.from('structures').select('id'),
+    supa.from('inspections').select('id'),
+    supa.from('points').select('id')
+  ]).then(function(r){
+    var localPids=rows.P.map(function(x){return x.id});
+    var localSids=rows.S.map(function(x){return x.id});
+    var localIids=rows.I.map(function(x){return x.id});
+    var localPTids=rows.PT.map(function(x){return x.id});
+    var remPids=(r[0].data||[]).map(function(x){return x.id});
+    var remSids=(r[1].data||[]).map(function(x){return x.id});
+    var remIids=(r[2].data||[]).map(function(x){return x.id});
+    var remPTids=(r[3].data||[]).map(function(x){return x.id});
+    var delP=remPids.filter(function(id){return localPids.indexOf(id)===-1});
+    var delS=remSids.filter(function(id){return localSids.indexOf(id)===-1});
+    var delI=remIids.filter(function(id){return localIids.indexOf(id)===-1});
+    var delPT=remPTids.filter(function(id){return localPTids.indexOf(id)===-1});
+    var chain=Promise.resolve();
+    if(delPT.length)chain=chain.then(function(){return supa.from('points').delete().in('id',delPT)});
+    if(delI.length)chain=chain.then(function(){return supa.from('inspections').delete().in('id',delI)});
+    if(delS.length)chain=chain.then(function(){return supa.from('structures').delete().in('id',delS)});
+    if(delP.length)chain=chain.then(function(){return supa.from('projects').delete().in('id',delP)});
+    if(rows.P.length)chain=chain.then(function(){return supa.from('projects').upsert(rows.P)});
+    if(rows.S.length)chain=chain.then(function(){return supa.from('structures').upsert(rows.S)});
+    if(rows.I.length)chain=chain.then(function(){return supa.from('inspections').upsert(rows.I)});
+    if(rows.PT.length)chain=chain.then(function(){return supa.from('points').upsert(rows.PT)});
+    return chain.then(function(res){if(res&&res.error)throw res.error;return res});
+  });
+}
+
+function scheduleCloudPush(){
+  if(!supa||!session)return;
+  if(!isOnline){setSyncStatus('offline');return}
+  if(syncTimer)clearTimeout(syncTimer);
+  setSyncStatus('pending');
+  syncTimer=setTimeout(function(){
+    setSyncStatus('syncing');
+    cloudPushAllNow().then(function(){
+      setSyncStatus(isOnline?'idle':'offline');
+      // Queue new photos AFTER points are safely in DB, then upload
+      queueNewPhotoUploads();
+      processPhotoUploads();
+    }).catch(function(err){
+      console.error('Cloud push failed',err);
+      setSyncStatus('error',err);
+    });
+  },800);
+}
+
+// ----------------------- Photo uploads -----------------------------------
+function collectAllPhotoRefsWithPoint(){
+  var arr=[];
+  (state.projects||[]).forEach(function(p){(p.structures||[]).forEach(function(s){(s.inspections||[]).forEach(function(i){(i.points||[]).forEach(function(pt){(pt.photoRefs||[]).forEach(function(ref){arr.push({photoId:ref.id,pointId:pt.id,name:ref.name||'Foto',remote:!!ref.remote,storage_path:ref.storage_path||null})})})})})});
+  return arr;
+}
+
+function queueNewPhotoUploads(){
+  var all=collectAllPhotoRefsWithPoint();
+  var queuedIds={};photoUploadQueue.forEach(function(q){queuedIds[q.photoId]=true});
+  all.forEach(function(ref){
+    if(ref.remote)return;
+    if(queuedIds[ref.photoId])return;
+    photoUploadQueue.push({photoId:ref.photoId,pointId:ref.pointId,name:ref.name});
+  });
+  try{localStorage.setItem('photoUploadQueue',JSON.stringify(photoUploadQueue))}catch(e){}
+}
+
+function processPhotoUploads(){
+  if(photoUploadRunning)return Promise.resolve();
+  if(!supa||!session||!isOnline)return Promise.resolve();
+  if(!photoUploadQueue.length)return Promise.resolve();
+  photoUploadRunning=true;
+  function next(){
+    if(!photoUploadQueue.length){photoUploadRunning=false;return Promise.resolve()}
+    var item=photoUploadQueue[0];
+    if(!isUuidLike(item.photoId)||!isUuidLike(item.pointId)){
+      console.warn('[Sync] Skip alter Foto-Eintrag in Queue:',item);
+      photoUploadQueue.shift();
+      try{localStorage.setItem('photoUploadQueue',JSON.stringify(photoUploadQueue))}catch(e){}
+      return next();
+    }
+    return getPhotoBlob(item.photoId).then(function(blob){
+      if(!blob){photoUploadQueue.shift();try{localStorage.setItem('photoUploadQueue',JSON.stringify(photoUploadQueue))}catch(e){}return next()}
+      var ext=(blob.type&&blob.type.indexOf('png')!==-1)?'png':'jpg';
+      var storagePath=item.pointId+'/'+item.photoId+'.'+ext;
+      return supa.storage.from('photos').upload(storagePath,blob,{contentType:blob.type||'image/jpeg',upsert:true}).then(function(res){
+        if(res.error)throw res.error;
+        return supa.from('photos').upsert({id:item.photoId,point_id:item.pointId,storage_path:storagePath,name:item.name,mime_type:blob.type||'image/jpeg'});
+      }).then(function(res){
+        if(res&&res.error)throw res.error;
+        // Mark local ref as remote
+        (state.projects||[]).forEach(function(p){(p.structures||[]).forEach(function(s){(s.inspections||[]).forEach(function(i){(i.points||[]).forEach(function(pt){(pt.photoRefs||[]).forEach(function(ref){if(ref.id===item.photoId){ref.remote=true;ref.storage_path=storagePath}})})})})});
+        saveState();
+        photoUploadQueue.shift();
+        try{localStorage.setItem('photoUploadQueue',JSON.stringify(photoUploadQueue))}catch(e){}
+        return next();
+      });
+    }).catch(function(err){
+      console.warn('Foto-Upload fehlgeschlagen, neuer Versuch später',err);
+      setSyncStatus(isOnline?'error':'offline',err);
+      photoUploadRunning=false;
+    });
+  }
+  return next();
+}
+
+// Extend getPhotoBlob: if not in IndexedDB but ref.storage_path exists, fetch from storage
+var _origGetPhotoBlob=window.getPhotoBlob;
+window.getPhotoBlob=function(id){
+  return _origGetPhotoBlob(id).then(function(blob){
+    if(blob)return blob;
+    // Find storage_path
+    var path=null;
+    (state.projects||[]).forEach(function(p){(p.structures||[]).forEach(function(s){(s.inspections||[]).forEach(function(i){(i.points||[]).forEach(function(pt){(pt.photoRefs||[]).forEach(function(ref){if(ref.id===id&&ref.storage_path)path=ref.storage_path})})})})});
+    if(!path||!supa||!session)return null;
+    return supa.storage.from('photos').download(path).then(function(res){return res.data||null}).catch(function(){return null});
+  });
+};
+
+// ----------------------- Wrap mutators -----------------------------------
+var _origUpdate=window.update;
+window.update=function(mutator){
+  _origUpdate(mutator);
+  scheduleCloudPush();
+};
+
+var _origSavePoint=window.savePoint;
+window.savePoint=function(opts){
+  _origSavePoint(opts);
+  // Photo uploads are triggered AFTER the points-table push completes
+  // inside scheduleCloudPush() — see queueNewPhotoUploads() there.
+};
+
+var _origRender=window.render;
+window.render=function(){
+  _origRender();
+  augmentTopbar();
+};
+
+function augmentTopbar(){
+  if(!session)return;
+  var topbar=document.querySelector('.topbar');
+  if(!topbar)return;
+  if(document.getElementById('sync-toolbar'))return;
+  var box=document.createElement('div');
+  box.id='sync-toolbar';
+  box.className='sync-toolbar';
+  var email=(session.user&&session.user.email)||'';
+  box.innerHTML='<span class="badge sync-badge" id="sync-badge"></span><span class="fine">'+escapeHtml(email)+'</span><button class="btn btn-outline btn-sm" id="logout-btn" type="button">Abmelden</button>';
+  topbar.appendChild(box);
+  var lb=document.getElementById('logout-btn');
+  if(lb)lb.onclick=doLogout;
+  updateSyncBadge();
+}
+
+// ----------------------- Online/Offline ----------------------------------
+window.addEventListener('online',function(){
+  isOnline=true;
+  if(session){
+    setSyncStatus('syncing');
+    scheduleCloudPush();
+    processPhotoUploads();
+  }else{
+    setSyncStatus('idle');
+  }
+});
+window.addEventListener('offline',function(){
+  isOnline=false;
+  setSyncStatus('offline');
+});
+
+// ----------------------- Init --------------------------------------------
+function initApp(){
+  if(!supa){
+    document.getElementById('app').innerHTML='<div class="auth-screen"><div class="auth-card"><h1 class="auth-title">Verbindung fehlgeschlagen</h1><p>Die Supabase-Bibliothek konnte nicht geladen werden. Bitte Internetverbindung prüfen und Seite neu laden.</p></div></div>';
+    return;
+  }
+  var inRecovery=detectRecoveryInUrl();
+  supa.auth.onAuthStateChange(function(event,sess){
+    if(event==='PASSWORD_RECOVERY'){renderPasswordSetScreen()}
+    else if(event==='SIGNED_OUT'){session=null;renderAuthScreen({info:'Du wurdest abgemeldet.'})}
+    else if(event==='TOKEN_REFRESHED'&&sess){session=sess}
+  });
+  if(inRecovery){
+    // Wait briefly for supabase-js to consume the hash and emit PASSWORD_RECOVERY.
+    // If nothing happened after 1.5s, show the screen anyway.
+    setTimeout(function(){
+      if(!document.getElementById('pw-new'))renderPasswordSetScreen();
+    },1500);
+    return;
+  }
+  supa.auth.getSession().then(function(res){
+    if(res&&res.data&&res.data.session){startSession(res.data.session)}
+    else{renderAuthScreen()}
+  }).catch(function(err){
+    renderAuthScreen({error:'Sitzungsprüfung fehlgeschlagen: '+String(err&&err.message||err)});
+  });
+}
+
+initApp();
 </script>
 </body>
 </html>
