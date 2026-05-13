@@ -454,12 +454,10 @@ function startSession(s){
   session=s;
   setSyncStatus('syncing');
   migrateLocalIdsToUuid();
-  migratePhotoIdsAsync().then(function(){
-    queueNewPhotoUploads();
-    return cloudInitialSync();
-  }).then(function(){
+  migratePhotoIdsAsync().then(cloudInitialSync).then(function(){
     setSyncStatus(isOnline?'idle':'offline');
     render();
+    queueNewPhotoUploads();
     processPhotoUploads();
   }).catch(function(err){
     console.error('Initial sync failed',err);
@@ -634,7 +632,16 @@ function processPhotoUploads(){
         return next();
       });
     }).catch(function(err){
-      console.warn('Foto-Upload fehlgeschlagen, neuer Versuch später',err);
+      console.warn('Foto-Upload fehlgeschlagen',err);
+      // FK-Verletzung (Code 23503) = der referenzierte Punkt existiert nicht (mehr)
+      // → Foto aus Queue droppen, sonst blockiert es alle weiteren Uploads
+      if(err&&(err.code==='23503'||/foreign key/i.test(err.message||''))){
+        console.warn('[Sync] Punkt fehlt in DB — Foto-Eintrag wird gelöscht:',item);
+        photoUploadQueue.shift();
+        try{localStorage.setItem('photoUploadQueue',JSON.stringify(photoUploadQueue))}catch(e){}
+        photoUploadRunning=false;
+        return processPhotoUploads();
+      }
       setSyncStatus(isOnline?'error':'offline',err);
       photoUploadRunning=false;
     });
