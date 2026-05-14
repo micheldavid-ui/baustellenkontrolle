@@ -56,6 +56,11 @@
     .sync-syncing,.sync-pending{color:var(--hint-text);border-color:var(--hint-border);background:var(--hint-bg)}
     .sync-error{color:var(--defect-text);border-color:var(--defect-border);background:var(--defect-bg)}
     .sync-offline{color:var(--muted)}
+    .lock-screen{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px}
+    .lock-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:32px 24px;width:min(100%,400px);text-align:center;display:flex;flex-direction:column;gap:10px}
+    .lock-icon{font-size:3rem;line-height:1;margin-bottom:4px}
+    .lock-title{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:1.5rem;letter-spacing:-.02em}
+    .lock-sub{color:var(--muted);margin:0 0 8px;font-size:.92rem}
     @media print {
       body{background:#fff !important;}
       .topbar,.layout>.card,.bottom-nav,.dialog-backdrop,.photo-modal,.mobile-inline{display:none !important;}
@@ -732,6 +737,110 @@ window.addEventListener('offline',function(){
   setSyncStatus('offline');
 });
 
+// ----------------------- Biometric Auth (WebAuthn) -----------------------
+var BIO_RECHECK_AFTER_HIDDEN_MS=10000; // re-prompt if app was in background >10s
+var bioSettings={enabled:false,credentialId:null,email:null};
+var isLocked=false;
+var lastHiddenAt=null;
+var pendingSessionForStart=null; // session waiting for unlock at app start
+(function loadBioSettings(){try{var raw=localStorage.getItem('bio_settings');if(raw)bioSettings=JSON.parse(raw)||bioSettings}catch(e){}})();
+function saveBioSettings(){try{localStorage.setItem('bio_settings',JSON.stringify(bioSettings))}catch(e){}}
+function isBioSupported(){return !!(window.PublicKeyCredential&&navigator.credentials&&navigator.credentials.create)}
+function isBioConfigured(){return !!(bioSettings.enabled&&bioSettings.credentialId)}
+function bufToB64(buf){var bytes=new Uint8Array(buf);var s='';for(var i=0;i<bytes.byteLength;i++)s+=String.fromCharCode(bytes[i]);return btoa(s)}
+function b64ToBuf(b64){var bin=atob(b64);var bytes=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return bytes.buffer}
+
+function registerBio(email){
+  if(!isBioSupported())return Promise.reject(new Error('Biometrie wird auf diesem Gerät nicht unterstützt.'));
+  var challenge=crypto.getRandomValues(new Uint8Array(32));
+  var userId=new TextEncoder().encode(email||'user');
+  return navigator.credentials.create({publicKey:{
+    challenge:challenge,
+    rp:{name:'Baustellenkontrolle',id:window.location.hostname},
+    user:{id:userId,name:email||'user',displayName:email||'user'},
+    pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],
+    authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required',residentKey:'preferred'},
+    timeout:60000,
+    attestation:'none'
+  }}).then(function(cred){
+    bioSettings={enabled:true,credentialId:bufToB64(cred.rawId),email:email||'',registeredAt:new Date().toISOString()};
+    saveBioSettings();
+    return true;
+  });
+}
+
+function authenticateBio(){
+  if(!isBioConfigured())return Promise.reject(new Error('Biometrie nicht eingerichtet.'));
+  var challenge=crypto.getRandomValues(new Uint8Array(32));
+  var credId=b64ToBuf(bioSettings.credentialId);
+  return navigator.credentials.get({publicKey:{
+    challenge:challenge,
+    allowCredentials:[{type:'public-key',id:credId,transports:['internal']}],
+    userVerification:'required',
+    timeout:60000
+  }}).then(function(){return true});
+}
+
+function disableBio(){bioSettings={enabled:false,credentialId:null,email:null};saveBioSettings()}
+
+function renderLockScreen(opts){
+  opts=opts||{};
+  isLocked=true;
+  var app=document.getElementById('app');
+  app.innerHTML='<div class="lock-screen"><div class="lock-card">'
+    +'<div class="lock-icon">🔒</div>'
+    +'<h1 class="lock-title">Baustellenkontrolle</h1>'
+    +'<p class="lock-sub">App ist gesperrt</p>'
+    +'<div id="lock-error"></div>'
+    +'<button class="btn" id="bio-unlock-btn" type="button">🔑 Mit Face ID / Touch ID entsperren</button>'
+    +'<button class="btn btn-outline" id="bio-logout-btn" type="button">Stattdessen abmelden</button>'
+    +'</div></div>';
+  var ub=document.getElementById('bio-unlock-btn');
+  var lb=document.getElementById('bio-logout-btn');
+  if(ub)ub.onclick=doBioUnlock;
+  if(lb)lb.onclick=function(){if(!confirm('Wirklich abmelden? Lokale Daten bleiben erhalten.'))return;isLocked=false;pendingSessionForStart=null;doLogout()};
+  // iOS sometimes refuses immediate prompts after navigation — small delay helps
+  setTimeout(doBioUnlock,300);
+}
+
+function setLockError(msg){
+  var el=document.getElementById('lock-error');
+  if(!el)return;
+  el.innerHTML=msg?'<div class="auth-error">'+escapeHtml(msg)+'</div>':'';
+}
+
+function doBioUnlock(){
+  setLockError('');
+  authenticateBio().then(function(){
+    isLocked=false;
+    if(pendingSessionForStart){
+      var s=pendingSessionForStart;pendingSessionForStart=null;
+      startSession(s);
+    }else if(session){
+      render();
+    }else{
+      renderAuthScreen();
+    }
+  }).catch(function(err){
+    var msg=(err&&err.message)||'Entsperren fehlgeschlagen';
+    // NotAllowedError = User hat abgelehnt
+    if(err&&err.name==='NotAllowedError')msg='Authentifizierung abgebrochen oder fehlgeschlagen.';
+    setLockError(msg+' Tippe oben auf "Entsperren" für einen weiteren Versuch.');
+  });
+}
+
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){
+    lastHiddenAt=Date.now();
+  }else{
+    if(!session||!isBioConfigured()||isLocked)return;
+    var elapsed=lastHiddenAt?(Date.now()-lastHiddenAt):0;
+    if(elapsed>=BIO_RECHECK_AFTER_HIDDEN_MS){
+      renderLockScreen({reason:'background'});
+    }
+  }
+});
+
 // ----------------------- Profile -----------------------------------------
 var currentProfile={display_name:'',email:''};
 
@@ -791,6 +900,19 @@ function profileDialog(){
     +'<button class="btn" id="save-pw-btn" type="button" style="width:100%">Passwort ändern</button>'
     +'</div>'
     +'<hr style="border:none;border-top:1px solid var(--border);margin:4px 0">'
+    +'<div class="stack-sm">'
+    +'<div class="card-title" style="font-size:0.95rem">Geräte-Sicherheit</div>'
+    +(isBioSupported()
+      ?(isBioConfigured()
+        ?'<div class="auth-info">Face ID / Touch ID ist auf diesem Gerät aktiv. Beim Öffnen der App wirst du zur Authentifizierung aufgefordert.</div>'
+          +'<button class="btn btn-outline" id="bio-disable-btn" type="button">Deaktivieren</button>'
+        :'<div class="fine">Schütze die App auf diesem Gerät zusätzlich mit Face ID oder Touch ID. Beim Öffnen wirst du zur Bestätigung aufgefordert.</div>'
+          +'<button class="btn btn-outline" id="bio-setup-btn" type="button">Face ID / Touch ID einrichten</button>'
+       )
+      :'<div class="fine">Biometrie wird auf diesem Browser/Gerät nicht unterstützt.</div>'
+     )
+    +'</div>'
+    +'<hr style="border:none;border-top:1px solid var(--border);margin:4px 0">'
     +'<button class="btn btn-outline" data-close-profile="1" style="width:100%">Schließen</button>'
     +'</div></div></div>';
 }
@@ -799,6 +921,28 @@ function bindProfileEvents(){
   document.querySelectorAll('#profile-dialog-root [data-close-profile]').forEach(function(el){el.onclick=function(){closeProfileDialog()}});
   var nb=document.getElementById('save-name-btn');if(nb)nb.onclick=saveProfileName;
   var pb=document.getElementById('save-pw-btn');if(pb)pb.onclick=saveProfilePassword;
+  var bioSetup=document.getElementById('bio-setup-btn');
+  if(bioSetup)bioSetup.onclick=function(){
+    setProfileStatus('');
+    bioSetup.disabled=true;
+    bioSetup.textContent='Bestätige am Gerät...';
+    registerBio(currentProfile.email).then(function(){
+      setProfileStatus('Face ID / Touch ID erfolgreich eingerichtet.',false);
+      // re-render dialog to show new state
+      closeProfileDialog();setTimeout(openProfileDialog,200);
+    }).catch(function(err){
+      setProfileStatus('Einrichten fehlgeschlagen: '+(err&&err.message||String(err)),true);
+      bioSetup.disabled=false;
+      bioSetup.textContent='Face ID / Touch ID einrichten';
+    });
+  };
+  var bioDisable=document.getElementById('bio-disable-btn');
+  if(bioDisable)bioDisable.onclick=function(){
+    if(!confirm('Face ID / Touch ID auf diesem Gerät deaktivieren? Du musst dich beim nächsten Öffnen wieder mit Email + Passwort anmelden.'))return;
+    disableBio();
+    setProfileStatus('Biometrie deaktiviert.',false);
+    closeProfileDialog();setTimeout(openProfileDialog,200);
+  };
 }
 
 function setProfileStatus(msg,isError){
@@ -948,8 +1092,17 @@ function initApp(){
     return;
   }
   supa.auth.getSession().then(function(res){
-    if(res&&res.data&&res.data.session){startSession(res.data.session)}
-    else{renderAuthScreen()}
+    if(res&&res.data&&res.data.session){
+      if(isBioConfigured()){
+        // Bio-protected: lock first, then start session after unlock
+        pendingSessionForStart=res.data.session;
+        renderLockScreen({reason:'init'});
+      }else{
+        startSession(res.data.session);
+      }
+    }else{
+      renderAuthScreen();
+    }
   }).catch(function(err){
     renderAuthScreen({error:'Sitzungsprüfung fehlgeschlagen: '+String(err&&err.message||err)});
   });
