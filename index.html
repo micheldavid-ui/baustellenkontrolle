@@ -691,6 +691,7 @@ var _origRender=window.render;
 window.render=function(){
   _origRender();
   augmentTopbar();
+  patchPhotoInput();
 };
 
 function augmentTopbar(){
@@ -852,6 +853,77 @@ function saveProfilePassword(){
     setProfileStatus('Fehler: '+(err&&err.message||String(err)),true);
     if(btn){btn.disabled=false;btn.textContent='Passwort ändern'}
   });
+}
+
+// ----------------------- Photo compression -------------------------------
+var PHOTO_MAX_DIM=1600;
+var PHOTO_JPEG_QUALITY=0.75;
+
+function compressImage(file){
+  return new Promise(function(resolve){
+    if(!file||!file.type||file.type.indexOf('image/')!==0){resolve(file);return}
+    // Skip compression if file is already small (<200 KB)
+    if(file.size&&file.size<200*1024){resolve(file);return}
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var img=new Image();
+      img.onload=function(){
+        try{
+          var w=img.naturalWidth||img.width;
+          var h=img.naturalHeight||img.height;
+          if(w>PHOTO_MAX_DIM||h>PHOTO_MAX_DIM){
+            if(w>h){h=Math.round(h*PHOTO_MAX_DIM/w);w=PHOTO_MAX_DIM}
+            else{w=Math.round(w*PHOTO_MAX_DIM/h);h=PHOTO_MAX_DIM}
+          }
+          var canvas=document.createElement('canvas');
+          canvas.width=w;canvas.height=h;
+          var ctx=canvas.getContext('2d');
+          ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
+          ctx.drawImage(img,0,0,w,h);
+          canvas.toBlob(function(blob){
+            if(!blob){resolve(file);return}
+            // If compression made it bigger (rare for small originals), keep original
+            if(blob.size>=file.size){resolve(file);return}
+            var name=(file.name||'foto').replace(/\.[^.]+$/,'')+'.jpg';
+            try{
+              var compressedFile=new File([blob],name,{type:'image/jpeg',lastModified:Date.now()});
+              resolve(compressedFile);
+            }catch(e2){
+              try{blob.name=name}catch(e3){}
+              resolve(blob);
+            }
+          },'image/jpeg',PHOTO_JPEG_QUALITY);
+        }catch(err){console.warn('Komprimierung fehlgeschlagen',err);resolve(file)}
+      };
+      img.onerror=function(){resolve(file)};
+      img.src=e.target.result;
+    };
+    reader.onerror=function(){resolve(file)};
+    reader.readAsDataURL(file);
+  });
+}
+
+function patchPhotoInput(){
+  var photoInput=document.getElementById('photo-input');
+  if(!photoInput||photoInput.dataset.compressionPatched==='1')return;
+  photoInput.dataset.compressionPatched='1';
+  photoInput.onchange=function(){
+    var files=Array.from(photoInput.files||[]);
+    photoInput.value='';
+    if(!files.length)return;
+    Promise.all(files.map(function(f){return compressImage(f)})).then(function(compressed){
+      update(function(){
+        pendingPhotoFiles=pendingPhotoFiles.concat(compressed);
+        var existingRefs=state.form.photoRefs||[];
+        state.form.photoAttached=(existingRefs.length+pendingPhotoFiles.length)>0;
+        state.form.photoCount=existingRefs.length+pendingPhotoFiles.length;
+        state.form.photoNames=existingRefs.map(function(ref){return ref.name||'Foto'}).concat(pendingPhotoFiles.map(function(f){return f.name||'Foto'}));
+      });
+    }).catch(function(err){
+      console.error('Foto-Komprimierung fehlgeschlagen',err);
+      alert('Ein Foto konnte nicht verarbeitet werden.');
+    });
+  };
 }
 
 // ----------------------- Init --------------------------------------------
