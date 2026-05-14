@@ -371,10 +371,15 @@ function updateSyncBadge(){var b=document.getElementById('sync-badge');if(!b)ret
 // ----------------------- Auth UI ------------------------------------------
 function renderPasswordSetScreen(opts){
   opts=opts||{};
+  var isInvite=opts.mode==='invite';
+  var title=isInvite?'Willkommen — Passwort festlegen':'Neues Passwort setzen';
+  var sub=isInvite
+    ?'Du wurdest zum Team eingeladen. Lege jetzt ein Passwort für deinen Account fest, danach bist du automatisch eingeloggt.'
+    :'Lege ein Passwort für deinen Account fest. Du brauchst es bei jedem zukünftigen Login.';
   var app=document.getElementById('app');
   app.innerHTML='<div class="auth-screen"><div class="auth-card">'
-    +'<h1 class="auth-title">Neues Passwort setzen</h1>'
-    +'<p class="auth-sub">Lege ein Passwort für deinen Account fest. Du brauchst es bei jedem zukünftigen Login.</p>'
+    +'<h1 class="auth-title">'+escapeHtml(title)+'</h1>'
+    +'<p class="auth-sub">'+escapeHtml(sub)+'</p>'
     +(opts.error?'<div class="auth-error">'+escapeHtml(opts.error)+'</div>':'')
     +(opts.info?'<div class="auth-info">'+escapeHtml(opts.info)+'</div>':'')
     +'<div><label class="label">Neues Passwort</label><input class="input" id="pw-new" type="password" autocomplete="new-password" placeholder="mindestens 8 Zeichen"></div>'
@@ -409,13 +414,18 @@ function renderPasswordSetScreen(opts){
   newEl.focus();
 }
 
-function detectRecoveryInUrl(){
-  // Supabase puts recovery params in hash after redirect: #access_token=...&type=recovery&...
+function detectAuthRedirectType(){
+  // Supabase puts auth params in hash after redirect: #access_token=...&type=...&...
+  // type can be: recovery (password reset), invite (invitation), signup, magiclink
   var hash=window.location.hash||'';
-  if(!hash||hash.length<2)return false;
+  if(!hash||hash.length<2)return null;
   var params=new URLSearchParams(hash.slice(1));
-  return params.get('type')==='recovery';
+  var t=params.get('type');
+  if(t==='recovery'||t==='invite')return t;
+  return null;
 }
+// kept for compatibility
+function detectRecoveryInUrl(){return detectAuthRedirectType()==='recovery'}
 
 function renderAuthScreen(opts){
   opts=opts||{};
@@ -850,17 +860,18 @@ function initApp(){
     document.getElementById('app').innerHTML='<div class="auth-screen"><div class="auth-card"><h1 class="auth-title">Verbindung fehlgeschlagen</h1><p>Die Supabase-Bibliothek konnte nicht geladen werden. Bitte Internetverbindung prüfen und Seite neu laden.</p></div></div>';
     return;
   }
-  var inRecovery=detectRecoveryInUrl();
+  var authRedirect=detectAuthRedirectType(); // 'recovery' | 'invite' | null
   supa.auth.onAuthStateChange(function(event,sess){
-    if(event==='PASSWORD_RECOVERY'){renderPasswordSetScreen()}
+    if(event==='PASSWORD_RECOVERY'){renderPasswordSetScreen({mode:'recovery'})}
+    else if(event==='SIGNED_IN'&&authRedirect==='invite'){renderPasswordSetScreen({mode:'invite'})}
     else if(event==='SIGNED_OUT'){session=null;renderAuthScreen({info:'Du wurdest abgemeldet.'})}
     else if(event==='TOKEN_REFRESHED'&&sess){session=sess}
   });
-  if(inRecovery){
-    // Wait briefly for supabase-js to consume the hash and emit PASSWORD_RECOVERY.
+  if(authRedirect){
+    // Wait briefly for supabase-js to consume the hash and emit the auth event.
     // If nothing happened after 1.5s, show the screen anyway.
     setTimeout(function(){
-      if(!document.getElementById('pw-new'))renderPasswordSetScreen();
+      if(!document.getElementById('pw-new'))renderPasswordSetScreen({mode:authRedirect});
     },1500);
     return;
   }
