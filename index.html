@@ -713,7 +713,10 @@ function augmentTopbar(){
   box.innerHTML='<span class="badge sync-badge" id="sync-badge"></span>'
     +'<button class="btn btn-ghost btn-sm" id="profile-link" type="button" title="'+escapeAttr(email)+'" style="text-decoration:underline">'+escapeHtml(label)+'</button>'
     +'<button class="btn btn-outline btn-sm" id="logout-btn" type="button">Abmelden</button>';
-  topbar.appendChild(box);
+  // Insert sync-toolbar BEFORE the badges row so the order is: Title → Toolbar → Badges
+  var badgesRow=topbar.querySelector('.row.wrap');
+  if(badgesRow)topbar.insertBefore(box,badgesRow);
+  else topbar.appendChild(box);
   var lb=document.getElementById('logout-btn');
   if(lb)lb.onclick=doLogout;
   var pl=document.getElementById('profile-link');
